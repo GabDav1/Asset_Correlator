@@ -6,11 +6,12 @@ const URL_KEY = "apikey=O3LKWM6IB2BF94KE";
 var data3;
 var data4;
 var isFinished;
-var searchBox = '';
+var searchBox = [];
+searchBox[0] = '';
 var searchBoxApi = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
 var urlFunc = document.getElementById('z').value;
 
-//change time function(TODO???)
+//change time function
 document.getElementById('z').onchange = function() {
 	urlFunc = document.getElementById('z').value;
 	
@@ -21,17 +22,37 @@ document.getElementById('z').onchange = function() {
 };
 
 //init ticker 1, then 2
-var ticker1 = document.getElementById('x').value;
+//var ticker1 = document.getElementById('x').value;!!!!!!!!!!!!!!!!!!!!!
+var isAss1Sel = true;
+var isAss2Sel = false;
 
-document.getElementById('x').onchange = function() {
-	ticker1 = document.getElementById('x').value;
-	tickers = [ticker1, ticker2];
-	apiCall[0] = updateS(1); //TODO DE ADAUGAT PARAMETRU AICI PENTRU PRELUAREA LUI Z
-	loadArray(apiCall[0]);
-	//console.log(apiCall[0]);
+document.getElementById('x').onclick = function() {
+	
+	if(isAss1Sel){
+		$('#x').removeClass('card1');
+		$('#x').addClass('card2');
+	}else{
+		$('#x').removeClass('card2');
+		$('#x').addClass('card1');
+	}
+	isAss1Sel = !isAss1Sel;
+	//console.log(isAss1Sel);
 };
 
-var ticker2 = document.getElementById('y').value;
+document.getElementById('y').onclick = function() {//copy-pasted code, not ideal but fine for now
+	
+	if(isAss2Sel){
+		$('#y').removeClass('card1');
+		$('#y').addClass('card2');
+	}else{
+		$('#y').removeClass('card2');
+		$('#y').addClass('card1');
+	}
+	isAss2Sel = !isAss2Sel;
+	//console.log(isAss2Sel);
+};
+
+//var ticker2 = document.getElementById('y').value;!!!!!!!!!!!!!!!!!!!!!!
 
 document.getElementById('y').onchange = function() {
 	ticker2 = document.getElementById('y').value;
@@ -40,12 +61,12 @@ document.getElementById('y').onchange = function() {
 	loadArray(apiCall[1]);
 	//console.log(apiCall[1]);
 };
-var tickers = [ticker1, ticker2];
+var tickers = ['PLC', 'PLC'];
 
 var apiCall = ["",""];
 //generam obiectele url-urilor
 	for(let i = 1; i<=2; i++){
-		apiCall[i-1] = updateS(i);
+		//apiCall[i-1] = updateS(i); 
 		//console.log(apiCall[i-1].totURL);
 	}
 
@@ -154,33 +175,64 @@ document.getElementById('visualize').onclick = function(ev) {
 	
 };
 
-document.getElementById('search').onkeypress = function(event) {
-	
-	var optionTxt;
-	if(event.key == 'Enter'){
+document.getElementById('search').onchange = function()
+{
+	var thisTicker = this.value; 
 
-		$.getJSON(searchBoxApi+searchBox+'&'+URL_KEY, function(json) {
-			//console.log(json['bestMatches']);
-			json['bestMatches'].forEach (function (item, index, arr) {
-				// Setam tickerele din meniul de selectie;
-				optionTxt += '<option value=' + '"' + arr[index]['1. symbol'] +'"' + '>' +
-					arr[index]['1. symbol'] +' - '+ arr[index]['2. name'] +
-					' - ' + arr[index]['3. type'] +' - '+ arr[index]['4. region'] + '</option>' +
-					'<br>';
-		//document.getElementById('x').value = json['bestMatches'][0]['1. symbol']; 
-		});
-
-			document.getElementById("x").innerHTML = optionTxt;
-			document.getElementById("y").innerHTML = optionTxt;
-		})
-
-		searchBox = '';
-		document.getElementById('search').value = '';
-		//https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tencent&apikey=demo
-	} else {
-		searchBox += event.key;
-		//TODO document.getElementById("status").innerHTML = searchBox + '<br>';
+	if(isAss1Sel){
+		document.getElementById('x').innerHTML += thisTicker;
+		ticker1 = thisTicker;
+		tickers[0] = ticker1;
+		apiCall[0] = updateS(1);
+		loadArray(apiCall[0]);
 	}
+	if(isAss2Sel){
+		document.getElementById('y').innerHTML += thisTicker;
+		ticker2 = thisTicker;
+		tickers[1] = ticker2;
+		apiCall[1] = updateS(2); 
+		loadArray(apiCall[1]);
+	}
+	searchBox[0] = '';	
+	document.getElementById('search').value = '';
+};
+
+document.getElementById('search').onkeypress = function(event) 
+{
+	//console.log(event.key);
+	var idIntv = setInterval(() => { //la fiecare 150ms
+		//TODO IMPLEMENTAT EXCEPTIE PT ENTER + ordine search si if???
+		if(searchBox[0] != '' && (searchBox[0] != searchBox[1])){
+			var optionTxt = '';//todo - as putea sa-l scot pe asta ca global eventual
+			//if(event.key == 'Enter'){
+				$.getJSON(searchBoxApi+searchBox[0]+'&'+URL_KEY, function(json) {
+					console.log(searchBoxApi+searchBox[0]+'&'+URL_KEY);
+					console.log(json);
+					searchBox[1] = searchBox[0];
+					json['bestMatches'].forEach (function (item, index, arr) {
+						// Setam tickerele din meniul de selectie;
+						optionTxt += '<option value=' + '"' + arr[index]['1. symbol'] +'"' + '>' +
+							arr[index]['2. name'] +
+							' - ' + arr[index]['3. type'] +' - '+ arr[index]['4. region'] + '</option>';
+				//document.getElementById('x').value = json['bestMatches'][0]['1. symbol']; 
+				});
+					console.log(optionTxt);
+					document.getElementById("tickers").innerHTML = optionTxt;
+					//document.getElementById("x").innerHTML = optionTxt;
+					
+				})
+				//https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tencent&apikey=demo
+				clearInterval(idIntv);
+				
+		}else {
+			console.log("Incercare");	
+			//searchBox += event.key;	
+		}
+		searchBox[0] = document.getElementById('search').value;
+	  }, 150);
+		
+		//TODO document.getElementById("status").innerHTML = searchBox + '<br>';
+	//}
 	//console.log(searchBox);
 };
 
