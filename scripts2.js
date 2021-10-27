@@ -1,5 +1,5 @@
 google.charts.load('current', {'packages': ['corechart']});
-google.charts.setOnLoadCallback(loadData);
+//google.charts.setOnLoadCallback(loadData);
 
 //Variabilele globale
 const URL_KEY = "apikey=O3LKWM6IB2BF94KE";
@@ -8,8 +8,10 @@ var data4;
 var isFinished;
 var searchBox = [];
 searchBox[0] = '';
-var searchBoxApi = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
+const searchBoxApi = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
 var urlFunc = document.getElementById('z').value;
+const waitTime = 300;//ticker-box interval (to call api only per "intention")
+var isSearch = false;
 
 //change time function
 document.getElementById('z').onchange = function() {
@@ -26,31 +28,36 @@ document.getElementById('z').onchange = function() {
 var isAss1Sel = true;
 var isAss2Sel = false;
 
-document.getElementById('x').onclick = function() {
-	
-	if(isAss1Sel){
-		$('#x').removeClass('card1');
-		$('#x').addClass('card2');
-	}else{
-		$('#x').removeClass('card2');
-		$('#x').addClass('card1');
-	}
-	isAss1Sel = !isAss1Sel;
-	//console.log(isAss1Sel);
-};
+$("[name = 'xy']").click(function() {
+	//console.log(this.id);
 
-document.getElementById('y').onclick = function() {//copy-pasted code, not ideal but fine for now
-	
-	if(isAss2Sel){
+	//$("#"+ this.id).toggleClass('card1');
+	//$("#"+ this.id).toggleClass('card2');
+
+	if(this.id == 'x' && (!isAss2Sel)){
+		isAss1Sel = !isAss1Sel;
+		$('#x').toggleClass('card1 card2');
+		//console.log(isAss2Sel);
+	}else if(this.id == 'x' && isAss2Sel){
+		isAss2Sel = !isAss2Sel;
+		isAss1Sel = !isAss1Sel;
 		$('#y').removeClass('card1');
 		$('#y').addClass('card2');
-	}else{
-		$('#y').removeClass('card2');
-		$('#y').addClass('card1');
+		$('#x').toggleClass('card1 card2');
 	}
-	isAss2Sel = !isAss2Sel;
-	//console.log(isAss2Sel);
-};
+
+	if(this.id == 'y' && (!isAss1Sel)){
+		isAss2Sel = !isAss2Sel;
+		$('#y').toggleClass('card1 card2');
+		//console.log(isAss2Sel);
+	}else if(this.id == 'y' && isAss1Sel){
+		isAss2Sel = !isAss2Sel;
+		isAss1Sel = !isAss1Sel;
+		$('#x').removeClass('card1');
+		$('#x').addClass('card2');
+		$('#y').toggleClass('card1 card2');
+	}
+  });
 
 //var ticker2 = document.getElementById('y').value;!!!!!!!!!!!!!!!!!!!!!!
 
@@ -123,7 +130,8 @@ function loadArray(item){
 				//build array
 				var arTest =[];
 				let ind = 1;
-				for(var i in Object.keys(timeD))
+			try{
+				for(var i in Object.keys(timeD))//IMPLEMENT TRY-CATCH HERE
 				{
 					//inversarea proprietatilor obiectului si adaugarea lor intr-un array(datele in obiect sunt teoretic neordonate si practic ordonate invers)
 					let dataP = Object.keys(timeD).reverse()[i];
@@ -148,8 +156,19 @@ function loadArray(item){
 						break;
 				}
 				isFinished = 1;
+			}catch(error){
+				console.log(error.name + ' ' +	error.message);
+				document.getElementById('err-try-catch').setAttribute("style", "display: contents;");
+			}
 				//console.log(isFinished);
 			})
+			.fail(function( textStatus, error ) {
+				console.log( "Request Failed: " + textStatus + ", " + error );
+				document.getElementById('err-gjson-fail').setAttribute("style", "display: contents;");
+			})
+			  .always(function() {
+				//console.log( "complete" );
+			  });
 		
 	//return isFinished;	TODO REVIEW ASYNC AWAIT FETCH ALSO SEARCH ENDPOINT API
 }
@@ -177,17 +196,20 @@ document.getElementById('visualize').onclick = function(ev) {
 
 document.getElementById('search').onchange = function()
 {
+	//waitTime = 50;
+	document.getElementById('err-try-catch').setAttribute("style", "display: none;");
+	document.getElementById('err-gjson-fail').setAttribute("style", "display: none;");
 	var thisTicker = this.value; 
 
 	if(isAss1Sel){
-		document.getElementById('x').innerHTML += thisTicker;
+		document.getElementById('x').firstElementChild.innerHTML = thisTicker;
 		ticker1 = thisTicker;
 		tickers[0] = ticker1;
 		apiCall[0] = updateS(1);
 		loadArray(apiCall[0]);
 	}
 	if(isAss2Sel){
-		document.getElementById('y').innerHTML += thisTicker;
+		document.getElementById('y').firstElementChild.innerHTML = thisTicker;
 		ticker2 = thisTicker;
 		tickers[1] = ticker2;
 		apiCall[1] = updateS(2); 
@@ -197,43 +219,39 @@ document.getElementById('search').onchange = function()
 	document.getElementById('search').value = '';
 };
 
-document.getElementById('search').onkeypress = function(event) 
+document.getElementById('search').onkeyup = function(event) 
 {
-	//console.log(event.key);
-	var idIntv = setInterval(() => { //la fiecare 150ms
-		//TODO IMPLEMENTAT EXCEPTIE PT ENTER + ordine search si if???
-		if(searchBox[0] != '' && (searchBox[0] != searchBox[1])){
-			var optionTxt = '';//todo - as putea sa-l scot pe asta ca global eventual
-			//if(event.key == 'Enter'){
-				$.getJSON(searchBoxApi+searchBox[0]+'&'+URL_KEY, function(json) {
-					console.log(searchBoxApi+searchBox[0]+'&'+URL_KEY);
-					console.log(json);
-					searchBox[1] = searchBox[0];
-					json['bestMatches'].forEach (function (item, index, arr) {
-						// Setam tickerele din meniul de selectie;
-						optionTxt += '<option value=' + '"' + arr[index]['1. symbol'] +'"' + '>' +
-							arr[index]['2. name'] +
-							' - ' + arr[index]['3. type'] +' - '+ arr[index]['4. region'] + '</option>';
-				//document.getElementById('x').value = json['bestMatches'][0]['1. symbol']; 
-				});
-					console.log(optionTxt);
-					document.getElementById("tickers").innerHTML = optionTxt;
-					//document.getElementById("x").innerHTML = optionTxt;
-					
-				})
-				//https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=tencent&apikey=demo
+	searchBox[0] = document.getElementById('search').value;
+	//if(searchBox[0] != '' && (searchBox[0] != searchBox[1])){
+	if(!isSearch && searchBox[0] != ''){
+		isSearch = true;
+		var idIntv = setInterval(() => { 
+			if(searchBox[1] != searchBox[0]){
+				searchBox[1] = searchBox[0];
+				//console.log('skip search, 1 is '+searchBox[1]+' and 0 is '+searchBox[0]);
+			}else{
+				//console.log('run search, 1 is '+searchBox[1]+' and 0 is '+searchBox[0]);
+				if(searchBox[0] == ''){
+					clearInterval(idIntv);
+					throw 'call cannot be empty';
+			}
+				var optionTxt = '';//fetch async await...
+					$.getJSON(searchBoxApi+searchBox[0]+'&'+URL_KEY, function(json) {
+						console.log(json);// Add try-catch block here aswell
+						searchBox[1] = searchBox[0];
+						json['bestMatches'].forEach (function (item, index, arr) {
+							// Setting up the tickers for the drop-down box
+							optionTxt += '<option value=' + '"' + arr[index]['1. symbol'] +'"' + '>' +
+								arr[index]['2. name'] +
+								' - ' + arr[index]['3. type'] +' - '+ arr[index]['4. region'] + '</option>';
+					});
+						document.getElementById("tickers").innerHTML = optionTxt;
+						})
 				clearInterval(idIntv);
-				
-		}else {
-			console.log("Incercare");	
-			//searchBox += event.key;	
-		}
-		searchBox[0] = document.getElementById('search').value;
-	  }, 150);
-		
-		//TODO document.getElementById("status").innerHTML = searchBox + '<br>';
-	//}
-	//console.log(searchBox);
+				isSearch = false;
+			}
+		}, waitTime);
+	}
 };
 
 

@@ -18,6 +18,10 @@
 		box-shadow: 0px 0px 2px 1px rgba(13, 110, 253, 0.5);
 		width: 8rem;
 			}
+			.rederr{
+		color: red;
+		display: none;
+			}
 		</style>
 	</head>
 	
@@ -31,20 +35,20 @@
 			<hr>
 			
 			<div class="container text-left">
-				<label name="x" id="x" class="card1">
-				Asset1: 
+				<label name="xy" id="x" class="card1">
+				Asset1: <label name='child'> - </label>
 				</label>
 				<br>
-				<label name="y" id="y" class="card2">
-				Asset2:	
+				<label name="xy" id="y" class="card2">
+				Asset2:	<label name='child'> - </label>
 				</label>
 				<br>
-				Function:  <select name="z" id="z">
+				<select name="z" id="z">
 					<option value="function=TIME_SERIES_DAILY&">Daily</option>
 					<option value="function=TIME_SERIES_DAILY_ADJUSTED&">Daily adjusted</option>
 					<option value="function=TIME_SERIES_WEEKLY&">Weekly</option>
 					<option value="function=TIME_SERIES_MONTHLY&">Monthly</option>
-				</select> 	
+				</select>  (Time frame) 	
 				<p id="status"></p>
 			</div>
 
@@ -61,6 +65,8 @@
 			<a href="#" id="visualize" class="btn btn-primary">Visualize/Compare</a>
 			<br>
 			<div id="lol" style="display: none;">Retrieving data from the server...</div>
+			<div id="err-try-catch" class="rederr">Ticker not found.</div>
+			<div id="err-gjson-fail" class="rederr">Could not connect to server.</div>
 			<br>
 			
 			<script src="scripts2.js"></script>
