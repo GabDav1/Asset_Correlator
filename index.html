@@ -6,72 +6,138 @@
 		<meta charset="utf-8">
 		<script src="jquery-3.5.1.min.js"></script>
 		<script src="https://www.gstatic.com/charts/loader.js"></script>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-		<style>
-			.card1{
-		border-color: rgb(13, 110, 253);
-		box-shadow: 0px 0px 6px 1px rgb(13, 110, 253);
-		width: 8rem;
-			}
-			.card2{
-		border-color: rgba(13, 110, 253, 0.5);
-		box-shadow: 0px 0px 2px 1px rgba(13, 110, 253, 0.5);
-		width: 8rem;
-			}
-			.rederr{
-		color: red;
-		display: none;
-			}
-		</style>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		<link rel="stylesheet" href="popout.css">
+		<link rel="stylesheet" href="reveal.css">
+		<link rel="stylesheet" href="undrln.css">
 	</head>
 	
 	<body>
-		
-		<div class="container text-center">
-		
-			<h1 class="display-4 text-center">Asset Comparrison 2</h1>
-			<br><br>
-			<div id="chart" style="width: 350 px; height: 350px; border: 2px solid black;"></div>
+		<div class="container text-center demo">
+			<h1 class="row text-center py-1 align-content-between flex-wrap boss">
+				<span class="display-6 col-lg-4 d-flex justify-content-center align-items-center text-left">Asset Comparrison 2</span>
+				
+				<span class="col-lg-7 d-flex justify-content-center align-items-center text-center">	</span>	
+				
+				<span class="col-lg-1 d-flex justify-content-center align-items-center text-center">
+					<img src="https://img.icons8.com/fluency-systems-filled/48/6E6E6E/circled-menu.png"/>
+				</span>
+			</h1>
+<br>
+			<div id="chart" class="gradient" style="width: 350 px; height: 350px; border: 1px solid black;"></div>
 			<hr>
-			
-			<div class="container text-left">
-				<label name="xy" id="x" class="card1">
-				Asset1: <label name='child'> - </label>
-				</label>
-				<br>
-				<label name="xy" id="y" class="card2">
-				Asset2:	<label name='child'> - </label>
-				</label>
-				<br>
-				<select name="z" id="z">
-					<option value="function=TIME_SERIES_DAILY&">Daily</option>
-					<option value="function=TIME_SERIES_DAILY_ADJUSTED&">Daily adjusted</option>
-					<option value="function=TIME_SERIES_WEEKLY&">Weekly</option>
-					<option value="function=TIME_SERIES_MONTHLY&">Monthly</option>
-				</select>  (Time frame) 	
-				<p id="status"></p>
+
+			<div class="row text-center py-3 align-content-between flex-wrap">
+				<div class="col-lg-7 d-flex justify-content-center align-items-center text-left">
+					<label name="pad">	</label> 	
+				</div>
+
+				<div class="col-lg-3 d-flex justify-content-center align-items-center text-left">
+						<select name="z" id="z" class="hover" >
+							<option value="function=TIME_SERIES_DAILY&">Daily</option>
+							<option value="function=TIME_SERIES_DAILY_ADJUSTED&">Daily adjusted</option>
+							<option value="function=TIME_SERIES_WEEKLY&">Weekly</option>
+							<option value="function=TIME_SERIES_MONTHLY&">Monthly</option>
+						</select>  
+						<div id="tstx" class="demotext"><span>&nbsp Time</span><span> Frame </span></div>
+				</div>
+				<div class="col-lg-2 d-flex justify-content-center align-items-center text-center">
+					<div class="form-check form-switch">
+						<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+						<label class="form-check-label boss" for="flexSwitchCheckDefault">$ABS / %PERC</label>
+					  </div>
+				</div>
+				
 			</div>
 
+			<div class="row text-center py-2 align-content-between flex-wrap">
+				
+				&nbsp &nbsp &nbsp &nbsp
+				<label name="xy" id="x" class="card1 col-lg-5 d-flex justify-content-center boss2">
+				Asset1: <label name='child'> - </label>
+				</label> 
+				<div class="col-lg-4 d-flex justify-content-center">
+					<label id="dsc1" class="boss2"><spaN>Asset Description...................................................</spaN></label>
+				</div> 
+				<div class="col-lg-3 d-flex justify-content-center">
+					<label name="pad">	</label> 	
+				</div>
+
+			</div>
+			<div class="row text-center py-2 align-content-between flex-wrap">
+
+				&nbsp &nbsp &nbsp &nbsp
+				<label name="xy" id="y" class="card4 col-lg-4 d-flex justify-content-center boss2">
+				Asset2:	<label name='child'> - </label>
+				</label>
+				<div class="col-lg-4 d-flex justify-content-center">
+					<label id="dsc2" class="boss2"><spaN>Asset2 Description..................................................</spaN></label>
+				</div>
+				<div class="col-lg-3 d-flex justify-content-center">
+					<label name="pad">	</label> 	
+				</div>
+
+			</div>
+
+<br>
+<br>
+				<p id="status"></p>
+			
+<br>
 				<input list="tickers" id="search" placeholder="Search for asset"/>
+
 				<datalist id="tickers">
-					<option value="AMD">Advanced Micro Devices</option>
-					<option value="NVDA">Nvidia</option>
-					<option value="AMC">AMC Meme Stocks International</option>
-					<option value="TSLA">Tesla</option>
+					<option value="AMD" id="AMD">Advanced Micro Devices</option>
+					<option value="NVDA" id="NVDA">Nvidia</option>
+					<option value="AMC" id="AMC">AMC Meme Stocks International</option>
+					<option value="TSLA" id="TSLA">Tesla</option>
 				</datalist>
 
 			<!--. <input type="text" id="search" placeholder="Search for asset"> -->
-			<br>
-			<a href="#" id="visualize" class="btn btn-primary">Visualize/Compare</a>
-			<br>
+<label name="pad" class="row text-center py-1"></label>
+
+			<a href="#" id="visualize" class="btn btn-primary butobj">Visualize/Compare</a>
+<br>
 			<div id="lol" style="display: none;">Retrieving data from the server...</div>
 			<div id="err-try-catch" class="rederr">Ticker not found.</div>
 			<div id="err-gjson-fail" class="rederr">Could not connect to server.</div>
-			<br>
+<br>
+<hr>
+<br>
+
+<div class="row py-2 text-center">   
+	<div class="col-lg-1 d-flex justify-content-center">
+		<label name="pad">	</label> 	
+	</div>
+	<div class="col-lg-5 d-flex justify-content-center demo2">
+		<a class="link" href="https://www.marketwatch.com/story/kirkland-lake-gold-ltd-stock-rises-thursday-outperforms-market-01639690435-b32c664daa9b?mod=mw_quote_news">
 			
-			<script src="scripts2.js"></script>
+			Kirkland Lake Gold Ltd. stock rises Thursday, outperforms market
+		</a>
+	</div>
+	
+	<div class="col-lg-5 d-flex justify-content-center demo2">
+		<span class="article__timestamp" data-est="2021-12-16T16:33:00">Dec. 16, 2021 at 4:33 p.m. ET</span>
 		
-		</div>
+			<span class="article__author">by MarketWatch Automation</span>
+			<label name="pad">THIS IS PADDING WHAT IS THIS	</label> 
+			<span class="article__timestamp" data-est="2021-12-16T16:33:00">Dec. 16, 2021 at 4:33 p.m. ET</span>
+			<label name="pad">IS THIS PADDING WHAT IS THIS	</label> 
+
+			<span class="article__author">by MarketWatch Automation</span>
+
+	</div>
+	<div class="col-lg-1 d-flex justify-content-center">
+			<label name="pad">	</label> 	
+	</div>
+	
+</div>
+
+</div><!--END OF CONTAINER -->
+
+			<script src="scripts2.js"></script>
+			<script src="junk.js"></script>
+		
 	</body>	
 	
 </html>

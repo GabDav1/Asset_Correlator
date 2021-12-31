@@ -25,12 +25,13 @@ document.getElementById('z').onchange = function() {
 
 //init ticker 1, then 2
 //var ticker1 = document.getElementById('x').value;!!!!!!!!!!!!!!!!!!!!!
+//var ticker2 = document.getElementById('y').value;!!!!!!!!!!!!!!!!!!!!!
 var isAss1Sel = true;
 var isAss2Sel = false;
 
 $("[name = 'xy']").click(function() {
 	//console.log(this.id);
-
+	
 	//$("#"+ this.id).toggleClass('card1');
 	//$("#"+ this.id).toggleClass('card2');
 
@@ -41,39 +42,30 @@ $("[name = 'xy']").click(function() {
 	}else if(this.id == 'x' && isAss2Sel){
 		isAss2Sel = !isAss2Sel;
 		isAss1Sel = !isAss1Sel;
-		$('#y').removeClass('card1');
-		$('#y').addClass('card2');
+		$('#y').removeClass('card3');
+		$('#y').addClass('card4');
 		$('#x').toggleClass('card1 card2');
 	}
 
 	if(this.id == 'y' && (!isAss1Sel)){
 		isAss2Sel = !isAss2Sel;
-		$('#y').toggleClass('card1 card2');
+		$('#y').toggleClass('card3 card4');
 		//console.log(isAss2Sel);
 	}else if(this.id == 'y' && isAss1Sel){
 		isAss2Sel = !isAss2Sel;
 		isAss1Sel = !isAss1Sel;
 		$('#x').removeClass('card1');
 		$('#x').addClass('card2');
-		$('#y').toggleClass('card1 card2');
+		$('#y').toggleClass('card3 card4');
 	}
   });
 
-//var ticker2 = document.getElementById('y').value;!!!!!!!!!!!!!!!!!!!!!!
-
-document.getElementById('y').onchange = function() {
-	ticker2 = document.getElementById('y').value;
-	tickers = [ticker1, ticker2];
-	apiCall[1] = updateS(2);
-	loadArray(apiCall[1]);
-	//console.log(apiCall[1]);
-};
 var tickers = ['PLC', 'PLC'];
 
 var apiCall = ["",""];
 //generam obiectele url-urilor
 	for(let i = 1; i<=2; i++){
-		//apiCall[i-1] = updateS(i); 
+		//apiCall[i-1] = updateS(i); ???
 		//console.log(apiCall[i-1].totURL);
 	}
 
@@ -202,18 +194,29 @@ document.getElementById('search').onchange = function()
 	var thisTicker = this.value; 
 
 	if(isAss1Sel){
+		//console.log(this);
+		//$('#dsc1').toggleClass('home-title');
 		document.getElementById('x').firstElementChild.innerHTML = thisTicker;
+		document.getElementById('dsc1').innerHTML ='<span>'+ document.getElementById(thisTicker).innerHTML +'</span>';
+		
+		$('#dsc1').removeClass('home-title');
+		$('#dsc1').addClass('rederr');
 		ticker1 = thisTicker;
 		tickers[0] = ticker1;
 		apiCall[0] = updateS(1);
 		loadArray(apiCall[0]);
+		styleWipe('ass1');
 	}
 	if(isAss2Sel){
 		document.getElementById('y').firstElementChild.innerHTML = thisTicker;
+		document.getElementById('dsc2').innerHTML ='<span>'+  document.getElementById(thisTicker).innerHTML+'</span>';
+		$('#dsc2').removeClass('home-title');
+		$('#dsc2').addClass('rederr');
 		ticker2 = thisTicker;
 		tickers[1] = ticker2;
 		apiCall[1] = updateS(2); 
 		loadArray(apiCall[1]);
+		styleWipe('ass2');
 	}
 	searchBox[0] = '';	
 	document.getElementById('search').value = '';
@@ -241,7 +244,7 @@ document.getElementById('search').onkeyup = function(event)
 						searchBox[1] = searchBox[0];
 						json['bestMatches'].forEach (function (item, index, arr) {
 							// Setting up the tickers for the drop-down box
-							optionTxt += '<option value=' + '"' + arr[index]['1. symbol'] +'"' + '>' +
+							optionTxt += '<option value=' + '"' + arr[index]['1. symbol'] +'"' +' id='+ '"' + arr[index]['1. symbol'] +'"' + '>' +
 								arr[index]['2. name'] +
 								' - ' + arr[index]['3. type'] +' - '+ arr[index]['4. region'] + '</option>';
 					});
