@@ -3,9 +3,22 @@ google.charts.load('current', {'packages': ['corechart']});
 
 //Variabilele globale
 const URL_KEY = "apikey=O3LKWM6IB2BF94KE";
+const NEWS_KEY = "c7c7e05fa22c46c2a65a53205f9bf617";
+const NEWS_KEY2 = "qHe3AG87CbJCa_N2655gIEIZbW_CMjXZCoB07Nh89_s";
 var data3;
 var data4;
-var isFinished;
+
+//data 3 in percentage
+var data5 = [];
+//data4 in percentage
+var data6 =[];
+
+//global compiled arrays
+var dataF; //in percentages
+var dataFD; //in absolute/dollar values
+
+var isFinished1; //first asset flag
+var isFinished2; //second asset flag
 var searchBox = [];
 searchBox[0] = '';
 const searchBoxApi = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
@@ -16,16 +29,18 @@ var isSearch = false;
 //change time function
 document.getElementById('z').onchange = function() {
 	urlFunc = document.getElementById('z').value;
-	
+	//some of these run concurrently, i sync them manually with flags
 	apiCall[0] = updateS(1);
 	apiCall[1] = updateS(2);
 	loadArray(apiCall[0]);
 	loadArray(apiCall[1]);
+	to_percent('ass1', apiCall[0]);
+	to_percent('ass2', apiCall[1]);
 };
 
 //init ticker 1, then 2
-//var ticker1 = document.getElementById('x').value;!!!!!!!!!!!!!!!!!!!!!
-//var ticker2 = document.getElementById('y').value;!!!!!!!!!!!!!!!!!!!!!
+var ticker1 = document.getElementById('x').value;
+var ticker2 = document.getElementById('y').value;
 var isAss1Sel = true;
 var isAss2Sel = false;
 
@@ -97,89 +112,22 @@ function updateS(selector)//generare url ca obiect cu proprietati de totUrl si i
 	}
 
 
-function loadArray(item){
-	isFinished = 0;
-	//fiecare item e obiectul url-ului cu propr. de url si index etc
-	//console.log(isFinished);
-	$.getJSON(item.totURL, function(json) {
-		let fortimeD;
-				switch(urlFunc.substr(21, 5)){
-					case "DAILY":
-						fortimeD = "Time Series (Daily)";
-						break;
-					case "WEEKL":
-						fortimeD = "Weekly Time Series";
-						break;
-					case "MONTH":
-						fortimeD = "Monthly Time Series";
-						break;
-					default:
-						console.log(urlFunc.substr(20, 6));
-				}
-				var timeD = json[fortimeD];
-				//console.log(json);
-				
-				//build array
-				var arTest =[];
-				let ind = 1;
-			try{
-				for(var i in Object.keys(timeD))//IMPLEMENT TRY-CATCH HERE
-				{
-					//inversarea proprietatilor obiectului si adaugarea lor intr-un array(datele in obiect sunt teoretic neordonate si practic ordonate invers)
-					let dataP = Object.keys(timeD).reverse()[i];
-					arTest[ind] = [];
-					arTest[ind][0] = dataP;
-					arTest[ind][1] = Number(timeD[dataP]["4. close"]);
-					ind++;
-				}
-				//CAPETE DE TABEL
-				arTest[0] = [];
-				arTest[0][0] = "Timp";
-				arTest[0][1] = "Pret " + item.ticker;
-				
-				switch(item.index){
-					case 1:
-						data3 = arTest;
-						console.log(data3);
-						break;
-					case 2:
-						data4 = arTest;
-						console.log(data4);
-						break;
-				}
-				isFinished = 1;
-			}catch(error){
-				console.log(error.name + ' ' +	error.message);
-				document.getElementById('err-try-catch').setAttribute("style", "display: contents;");
-			}
-				//console.log(isFinished);
-			})
-			.fail(function( textStatus, error ) {
-				console.log( "Request Failed: " + textStatus + ", " + error );
-				document.getElementById('err-gjson-fail').setAttribute("style", "display: contents;");
-			})
-			  .always(function() {
-				//console.log( "complete" );
-			  });
-		
-	//return isFinished;	TODO REVIEW ASYNC AWAIT FETCH ALSO SEARCH ENDPOINT API
-}
-
 
 document.getElementById('visualize').onclick = function(ev) {
 	//console.log(apiCall[0], apiCall[1]);
 	var idIntvl = 	setInterval(() => { //la fiecare 300ms verifica daca sunt gata datele
-			if(isFinished == 0) {
+			if(isFinished1 == 0 || isFinished2 == 0) {
 				//alert("data not ready");
 				document.getElementById('lol').setAttribute("style", "display: contents;");
 			}else{
-				var dataxx = [...data3];
-				var datayy = [...data4];
+				//var dataxx = [...data5];
+				//var datayy = [...data6];
 				document.getElementById('lol').setAttribute("style", "display: none;");
-				var dataF =	array_compiler(dataxx, datayy);
+				dataF =	array_compiler(data5, data6);//percentage
+				dataFD = array_compiler(data3, data4);///absolutes
 				ev.preventDefault();
+				console.log(dataF);//!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				drawC(dataF, apiCall[0].ticker + " vs " + apiCall[1].ticker + ", from " + dataF[1][0] + " to "+ dataF[dataF.length - 1][0]);
-				//console.log(data3);
 				clearInterval(idIntvl);
 			}
 		  }, 300);
@@ -205,7 +153,12 @@ document.getElementById('search').onchange = function()
 		tickers[0] = ticker1;
 		apiCall[0] = updateS(1);
 		loadArray(apiCall[0]);
+		//data5 here
+		to_percent('ass1', apiCall[0]);
+		//console.log(data3);
 		styleWipe('ass1');
+		//fetch the news about ticker
+		get_news(ticker1, 'ass1');
 	}
 	if(isAss2Sel){
 		document.getElementById('y').firstElementChild.innerHTML = thisTicker;
@@ -216,7 +169,12 @@ document.getElementById('search').onchange = function()
 		tickers[1] = ticker2;
 		apiCall[1] = updateS(2); 
 		loadArray(apiCall[1]);
+		//data6 here
+		to_percent('ass2', apiCall[1]);
+		//visual wipe effect
 		styleWipe('ass2');
+		//fetch the news about ticker
+		get_news(ticker2, 'ass2');
 	}
 	searchBox[0] = '';	
 	document.getElementById('search').value = '';
@@ -277,17 +235,20 @@ function drawC(dat, assetN){
 }
 
 function array_compiler(datax, datay) {
-	var dataG;
+	//let dataG = [...datax];	
 	
 	//taiem diferenta de lungime dintre array-uri prin splicing
 	if (datax.length < datay.length){
 		datay.splice(1,datay.length - datax.length);
 		console.log(datax[datax.length - 1][0],' ',datay[datax.length - 1][0]);
 	}else if(datax.length > datay.length){
-		datax.splice(1,datax.length - datay.length);//TODO DE IMPLEMENTAT DACA SUNT DIFERENTE PREA MARI CA PERIOADE
+		datax.splice(1,datax.length - datay.length);
 		console.log(datax[datay.length - 1][0],' ', datay[datay.length - 1][0]);
 	}//}else{
-		dataG = datax;	
+	
+	let dataG = [...datax];
+	
+	try{
 	//Compilarea datelor - pastram cubul cu maxim 3 coloane
 		if (dataG[0].length < 3){
 			dataG.forEach (function (item, index, arr) {
@@ -299,8 +260,12 @@ function array_compiler(datax, datay) {
 				arr[index].push(datay[index][1]);
 		});
 		}
+	}catch(error){
+		console.log(error.name + ' ' +	error.message);
+		console.log("array compiler error");
+	}
 	//}
-	//console.log(data3);
+	
 	return dataG;
 }
 
