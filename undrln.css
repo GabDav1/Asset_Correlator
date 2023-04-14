@@ -37,6 +37,22 @@
       box-shadow: -2px 0px 6px -3px #000000, 2px 0px 6px -3px #000000, 2px 2px 3px 2px rgba(0,0,0,0);
       background: #e5e7e1;
     }
+    .demo3 {
+     
+      box-shadow: -2px 0px 0px 0px rgb(255, 50, 0), 2px 0px 0px 0px rgb(255, 50, 0);
+      background: #e5e7e1;
+    }
+    .demo4 {
+      
+      box-shadow: -1px 0px 1px 0px rgb(13, 110, 253), 1px 0px 1px 0px rgb(13, 110, 253);
+      background: #e5e7e1;
+    }
+    .demo5 {
+     
+      background: #e5e7e1;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
     .hover {
       -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0); 
       box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
@@ -44,11 +60,6 @@
     .gradient {
       -webkit-box-shadow: 0px 0px 0px 5px #A0A0A0, inset 0px 10px 27px -8px rgba(255, 50, 0, 0.5), inset 0px -10px 27px -8px rgba(13, 110, 253, 0.5), 5px 5px 15px 5px rgba(0,0,0,0); 
       box-shadow: 0px 0px 0px 5px #A0A0A0, inset 0px 10px 27px -8px rgba(255, 50, 0, 0.5), inset 0px -10px 27px -8px rgba(13, 110, 253, 0.5), 5px 5px 15px 5px rgba(0,0,0,0);
-}
-    .gay {
-      -webkit-box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0); 
-      box-shadow: #FFF 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0,0,0,0);
-      background: #ECEFCF;
 }
     .flama {
       color: #FFFFFF;
@@ -85,4 +96,19 @@
     -webkit-box-shadow: inset -1px 3px 8px 5px #1F87FF, 2px 5px 16px 0px #0B325E, 5px 5px 15px 5px rgba(0,0,0,0); 
     box-shadow: inset -1px 3px 8px 5px #1F87FF, 2px 5px 16px 0px #0B325E, 5px 5px 15px 5px rgba(0,0,0,0);
     background: #1C6EA4;
+  }
+
+  #news-div{
+    position:relative;
+    padding-bottom: 50px;
+  }
+  
+  #page-footer{
+    position: absolute;
+    bottom: -105px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 25px;
+    width: 100%;
   }
