@@ -1,5 +1,4 @@
 
-
 function to_percent(datax, item) {
 	
 	var frstVl;
@@ -75,7 +74,8 @@ function loadArray(item){
 						console.log(urlFunc.substr(20, 6));
 				}
 				var timeD = json[fortimeD];
-				console.log(json);
+				//console.log(json);
+				//alert(item.totURL);
 				
 				//build array
 				var arTest =[];
@@ -121,5 +121,5 @@ function loadArray(item){
 				//console.log( "complete" );
 			  });
 		
-	//return isFinished;	TODO REVIEW ASYNC AWAIT FETCH ALSO SEARCH ENDPOINT API
+	//return isFinished
 }

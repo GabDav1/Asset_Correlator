@@ -1,5 +1,3 @@
-
-
 $('#flexSwitchCheckDefault').click(function() {
 	//toggles between percent and dollar values
 	if(document.getElementById('flexSwitchCheckDefault').checked){ 
@@ -25,6 +23,25 @@ function styleWipe(src){
 		}else if (src=='ass2'){
 			$('#dsc2').toggleClass('rederr home-title');
 		}
+}
+
+
+$('#crawler-test').click(function() {
+	//add url via prompt
+	const urlTcrawl = prompt('Insert URL here');
+	crawlPage(urlTcrawl);		
+});			
+
+async function crawlPage(pageURL) {
+	
+	//const res = await fetch(pageURL, {
+		//mode: "no-cors"	});
+
+	//console.log(await res.text());
+	fetch(pageURL, {
+		mode: "no-cors"	})
+		.then(response => {return response.text()})
+		.then(res => {console.log(res)});	
 }
 
 /*
@@ -84,4 +101,3 @@ body {
 	<span>E</span>
 	
 </p>
-*/

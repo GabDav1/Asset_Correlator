@@ -39,7 +39,7 @@
     }
     .demo3 {
      
-      box-shadow: -2px 0px 0px 0px black, 2px 0px 0px 0px black;
+      box-shadow: -2px 0px 0px 0px rgb(255, 50, 0), 2px 0px 0px 0px rgb(255, 50, 0);
       background: #e5e7e1;
     }
     .demo4 {
@@ -97,3 +97,18 @@
     box-shadow: inset -1px 3px 8px 5px #1F87FF, 2px 5px 16px 0px #0B325E, 5px 5px 15px 5px rgba(0,0,0,0);
     background: #1C6EA4;
   }
+
+  #news-div{
+    position:relative;
+    padding-bottom: 50px;
+  }
+  
+  #page-footer{
+    position: absolute;
+    bottom: -105px;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 25px;
+    width: 100%;
+}

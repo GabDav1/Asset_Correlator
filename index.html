@@ -12,15 +12,17 @@
 		<link rel="stylesheet" href="undrln.css">
 	</head>
 	
-	<body>
-		<div class="container-xxl text-center demo">
+	<body id="html-body">
+		<div class="container-xxl text-center demo" id="full-container">
 			<h1 class="row text-center py-1 align-content-between flex-wrap boss">
 				<span class="display-6 col-lg-4 d-flex justify-content-center align-items-center text-left">Asset Comparrison 2</span>
 				
 				<span class="col-lg-7 d-flex justify-content-center align-items-center text-center">	</span>	
 				
 				<span class="col-lg-1 d-flex justify-content-center align-items-center text-center">
-					<img src="https://img.icons8.com/fluency-systems-filled/48/6E6E6E/circled-menu.png"/>
+					<a href="#" id="crawler-test">
+						<img src="https://img.icons8.com/fluency-systems-filled/48/6E6E6E/circled-menu.png"/>
+					</a>
 				</span>
 			</h1>
 <br>
@@ -91,13 +93,13 @@
 								<thead>
 									<tr>
 										<th>Amount</th>
-										<th>Symbol</th>
-										<th>Bst buy</th>
-										<th>Bst sell</th>
+										<th>Symbol 1</th>
+										<th>Symbol 2</th>
+										<th>Score</th>
 										<th>Profit</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="table-body">
 									<tr>
 										<td><input type="checkbox" name="record"></td>
 										<td><span class="dpsym">BTCUSDT</span></td>
@@ -154,13 +156,13 @@
 
 		<div name='pad' class="col-lg-1 d-flex justify-content-center"></div>
 
-		<div class="col-lg-5 d-flex justify-content-center demo5" id="news-1">
+		<div class="col-lg-5 d-flex justify-content-center demo4" id="news-1">
 			<a class="link" href="https://www.marketwatch.com/story/kirkland-lake-gold-ltd-stock-rises-thursday-outperforms-market-01639690435-b32c664daa9b?mod=mw_quote_news">	
 				Kirkland Lake Gold Ltd. stock rises Thursday, outperforms market
 			</a>
 		</div>
 		
-		<div class="col-lg-5 d-flex justify-content-center demo5">
+		<div class="col-lg-5 d-flex justify-content-center demo3" id="news-2">
 			<div class="row py-2 text-center">by MarketWatch Automation</div>
 		</div>
 		
@@ -170,25 +172,32 @@
 
 		<div class="col-lg-1 d-flex justify-content-center"></div>
 		
-		<div class="col-lg-5 d-flex justify-content-center demo4" id="news-3">
+		<div class="col-lg-5 d-flex justify-content-center demo5" id="news-3">
 				Kirkland Lake Gold Ltd. stock rises Thursday, outperforms marketKirkland Lake Gold Ltd. stock rises Thursday, outperforms market Kirkland Lake Gold Ltd. stock rises Thursday, outperforms market Kirkland Lake Gold Ltd. stock rises Thursday, outperforms market
 		</div>
 		
-		<div class="col-lg-5 d-flex justify-content-center demo4">
+		<div class="col-lg-5 d-flex justify-content-center demo5" id="news-4">
 			<div class="row py-2 text-center">by MarketWatch Automation</div>
 		</div>
 		
 	</div>
+
+	<footer id="page-footer">
+		<hr>
+		COPYRIGHT <span id="footer-year"></span>
+	</footer> 
 </div>
 
+ 
 </div><!--END OF CONTAINER -->
 
+  
 
-			<script src="scripts2.js"></script>
+</body>
+
+<script src="scripts2.js"></script>
 			<script src="percent.js"></script>
 			<script src="junk.js"></script>
 			<script src="newsAPI.js"></script>
-		
-	</body>	
-	
+			<script src="correlation.js"></script>
 </html>
