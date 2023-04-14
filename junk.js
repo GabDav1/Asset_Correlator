@@ -1,5 +1,3 @@
-
-
 $('#flexSwitchCheckDefault').click(function() {
 	//toggles between percent and dollar values
 	if(document.getElementById('flexSwitchCheckDefault').checked){ 
@@ -103,4 +101,3 @@ body {
 	<span>E</span>
 	
 </p>
-*/

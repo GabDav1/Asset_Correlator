@@ -273,4 +273,3 @@ function drawC(dat, assetN) {
 
 	chart_obj.draw(data_obj, chart_opt);
 }
-

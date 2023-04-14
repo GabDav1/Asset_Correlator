@@ -1,5 +1,4 @@
 
-
 function to_percent(datax, item) {
 	
 	var frstVl;
