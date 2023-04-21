@@ -38,10 +38,10 @@
 							<div class="row text-center mt-4">
 								&nbsp &nbsp &nbsp &nbsp
 								<label name="xy" id="x" class="card1 col-lg-3 d-flex justify-content-center boss2">
-								Asset1: <label name='child'> - </label>
+								Asset1: <label name='child'> TSLA </label>
 								</label> 
 								<div class="col d-flex justify-content-left">
-									<label id="dsc1" class="boss2"><spaN>&nbsp &nbsp &nbsp Asset Description.....................</spaN></label>
+									<label id="dsc1" class="boss2"><spaN>&nbsp &nbsp &nbsp Tesla, Inc</spaN></label>
 								</div> 
 							</div>
 
@@ -49,10 +49,10 @@
 
 								&nbsp &nbsp &nbsp &nbsp
 								<label name="xy" id="y" class="card4 col-lg-3 d-flex justify-content-center boss2">
-								Asset2:	<label name='child'> - </label>
+								Asset2: <label name='child'> GOLD </label>
 								</label>
 								<div class="col d-flex justify-content-left">
-									<label id="dsc2" class="boss2"><spaN>&nbsp &nbsp &nbsp Asset 2 Description.....................</spaN></label>
+									<label id="dsc2" class="boss2"><spaN>&nbsp &nbsp &nbsp Barrick Gold Corporation</spaN></label>
 								</div>
 			
 							</div>
@@ -73,8 +73,7 @@
 								&nbsp &nbsp &nbsp
 								<div class="col-lg-6 d-flex justify-content-left">
 									<select name="z" id="z" class="hover" >
-										<option value="function=TIME_SERIES_DAILY&">Daily</option>
-										<option value="function=TIME_SERIES_DAILY_ADJUSTED&">Daily adjusted</option>
+										<option value="function=TIME_SERIES_DAILY_ADJUSTED&">Daily</option>
 										<option value="function=TIME_SERIES_WEEKLY&">Weekly</option>
 										<option value="function=TIME_SERIES_MONTHLY&">Monthly</option>
 									</select>  
@@ -92,23 +91,16 @@
 							<table id="dptable" class="table table-striped table-hover table-sm">
 								<thead>
 									<tr>
-										<th>Amount</th>
+										<th>Period</th>
 										<th>Symbol 1</th>
 										<th>Symbol 2</th>
 										<th>Score</th>
-										<th>Profit</th>
+										<th>% of divergence</th>
 									</tr>
 								</thead>
 								<tbody id="table-body">
 									<tr>
-										<td><input type="checkbox" name="record"></td>
-										<td><span class="dpsym">BTCUSDT</span></td>
-										<td><span class="dpaon">Price</span></td>
-										<td><span class="dpcurtype">USDT</span></td>
-										<td><span class="dpcond">Greater Than</span></td>
-									</tr>
-									<tr>
-										<td><input type="checkbox" name="record"></td>
+										<td><span class="dpsym">Daily</span></td>
 										<td><span class="dpsym">BTCUSDT</span></td>
 										<td><span class="dpaon">Price</span></td>
 										<td><span class="dpcurtype">USDT</span></td>

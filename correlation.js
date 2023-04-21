@@ -1,7 +1,7 @@
 function correlation(dataCube){
    
-    let cursorX, cursorY; 
-	let corScore = 0;
+    let cursorX, cursorY, corPer; 
+	let corScore = 0, corPerCount = 0;
     for (let i = 2; i <dataCube.length; i++) {
         
         cursorX = dataCube[i][1] - dataCube[i-1][1];
@@ -11,16 +11,20 @@ function correlation(dataCube){
         if((cursorX>0 && cursorY<0) || (cursorX<0 && cursorY>0)){
             //when trends diverge we sum their absolute values
 			corScore+= Math.abs(cursorX) + Math.abs(cursorY);
+			//also count the instances
+			corPerCount++;
         }
     }
 
+	//percentage of instances of divergence
+	corPer = (corPerCount / dataCube.length)* 100;
 	//renders it
 	corTable.innerHTML+= `<tr>
-		<td><input type="checkbox" name="record"></td>
+		<td><span>${urlFunc.substr(21, 5)}</span></td>
 		<td><span class="dpsym">${dataCube[0][1]}</span></td>
 		<td><span class="dpaon">${dataCube[0][2]}</span></td>
 		<td><span class="dpcurtype">${corScore}</span></td>
-		<td><span class="dpcond">Greater Than</span></td>
+		<td><span class="dpcond">${corPer}${' '}% </span></td>
 		</tr>`;
 
 }
