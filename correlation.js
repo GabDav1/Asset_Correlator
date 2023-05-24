@@ -23,8 +23,8 @@ function correlation(dataCube){
 		<td><span>${urlFunc.substr(21, 5)}</span></td>
 		<td><span class="dpsym">${dataCube[0][1]}</span></td>
 		<td><span class="dpaon">${dataCube[0][2]}</span></td>
-		<td><span class="dpcurtype">${corScore}</span></td>
-		<td><span class="dpcond">${corPer}${' '}% </span></td>
+		<td><span class="dpcurtype">${parseInt(corScore)}</span></td>
+		<td><span class="dpcond">${corPer.toFixed(2)}${' '}% </span></td>
 		</tr>`;
 
 }
