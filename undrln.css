@@ -39,13 +39,19 @@
     }
     .demo3 {
      
-      box-shadow: -2px 0px 0px 0px rgb(255, 50, 0), 2px 0px 0px 0px rgb(255, 50, 0);
+      box-shadow: -2px 0px 2px 0px rgb(255, 50, 0), 2px 0px 2px 0px rgb(255, 50, 0);
       background: #e5e7e1;
+
+      padding-top: 5px;
+      padding-bottom: 5px;
     }
     .demo4 {
-      
-      box-shadow: -1px 0px 1px 0px rgb(13, 110, 253), 1px 0px 1px 0px rgb(13, 110, 253);
+      margin-right: 4px;
+      box-shadow: -2px 0px 2px 0px rgb(13, 110, 253), 2px 0px 2px 0px rgb(13, 110, 253);
       background: #e5e7e1;
+
+      padding-top: 5px;
+      padding-bottom: 5px;
     }
     .demo5 {
      

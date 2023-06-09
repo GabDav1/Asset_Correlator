@@ -25,7 +25,7 @@ function correlation(dataCube){
 		<td><span class="dpaon">${dataCube[0][2]}</span></td>
 		<td><span class="dpcurtype">${parseInt(corScore)}</span></td>
 		<td><span class="dpcond">${corPer.toFixed(2)}${' '}% </span></td>
-		</tr>`;
+		</tr>`;//todo:row ID
 
 }
 
