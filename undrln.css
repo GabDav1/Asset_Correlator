@@ -104,6 +104,10 @@
     background: #1C6EA4;
   }
 
+  .all-rows{
+    cursor:pointer;
+  }
+
   #news-div{
     position:relative;
     padding-bottom: 50px;

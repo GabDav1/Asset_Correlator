@@ -1,4 +1,5 @@
 $('#flexSwitchCheckDefault').click(function() {
+	
 	//toggles between percent and dollar values
 	if(document.getElementById('flexSwitchCheckDefault').checked){ 
 		//var dataF =	array_compiler(data3, data4);

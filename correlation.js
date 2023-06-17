@@ -19,14 +19,35 @@ function correlation(dataCube){
 	//percentage of instances of divergence
 	corPer = (corPerCount / dataCube.length)* 100;
 	//renders it
-	corTable.innerHTML+= `<tr>
+	corTable.innerHTML+= `<tr class="all-rows" id="row${rowID}">
 		<td><span>${urlFunc.substr(21, 5)}</span></td>
 		<td><span class="dpsym">${dataCube[0][1]}</span></td>
 		<td><span class="dpaon">${dataCube[0][2]}</span></td>
 		<td><span class="dpcurtype">${parseInt(corScore)}</span></td>
 		<td><span class="dpcond">${corPer.toFixed(2)}${' '}% </span></td>
-		</tr>`;//todo:row ID
+		</tr>`;
 
+	//event listeners on rows
+	updateRows();
+
+	//todo: correlation temperatures for score and divergece percentage
+}
+
+function updateRows(){
+	allRows = document.querySelectorAll('.all-rows');
+
+	allRows.forEach(row =>{
+		row.addEventListener('click', ()=>{
+			///console.log(correlationDict.get(row.id));
+			dataF = correlationDict.get(row.id).perc;
+			dataFD = correlationDict.get(row.id).abs;
+
+			//reset perc toggle to default
+			document.querySelector('#flexSwitchCheckDefault').checked = false;
+
+			drawC(dataF, dataF[0][1] +' vs '+ dataF[0][2]);
+		});
+	})
 }
 
 function array_compiler(datax, datay, isPerc) {

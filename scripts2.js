@@ -1,8 +1,8 @@
 google.charts.load('current', { 'packages': ['corechart'] });
 //google.charts.setOnLoadCallback(get_news('bitcoin', 'ass1'));
 window.onload = () => {
-	get_news(tickers[1], 'ass2');
-	get_news(tickers[0], 'ass1');
+	get_news('Barrick Gold', 'ass2');
+	get_news('Tesla Motors', 'ass1');
 	//console.log(event);
 
 	let dummy = [];
@@ -32,14 +32,19 @@ window.onload = () => {
 //Variabilele globale
 const URL_KEY = "apikey=O3LKWM6IB2BF94KE";
 const NEWS_KEY = "c7c7e05fa22c46c2a65a53205f9bf617";
+//collection of asset pairs
+const correlationDict = new Map();
 //const NEWS_KEY2 = "qHe3AG87CbJCa_N2655gIEIZbW_CMjXZCoB07Nh89_s"; this is deprecated
-var data3;
-var data4;
+let data3 = [];
+let data4 = [];
+
+//row ID, row 1 is dummy
+let rowID = 2;
 
 //data 3 in percentage
-var data5 = [];
+const data5 = [];
 //data4 in percentage
-var data6 = [];
+const data6 = [];
 
 //global compiled arrays
 let dataF; //in percentages
@@ -68,13 +73,11 @@ let tickers = ['TSLA', 'GOLD'];//tickers at page-load
 let newsItems = 16;//initial news segments
 
 let apiCall = ["", ""];
-//generam obiectele url-urilor
-for (let i = 1; i <= 2; i++) {
-	//apiCall[i-1] = updateS(i); ???
-	//console.log(apiCall[i-1].totURL);
-}
+let allRows = [];
 
 function visualEye() {
+	//reset perc toggle to default
+	document.querySelector('#flexSwitchCheckDefault').checked = false;
 	//console.log(apiCall[0], apiCall[1]);
 	var idIntvl = setInterval(() => { //la fiecare 300ms verifica daca sunt gata datele
 		if (isFinished1 == 0 || isFinished2 == 0) {
@@ -88,6 +91,10 @@ function visualEye() {
 			//we only need correlation score for percentages
 			dataF = array_compiler(data5, data6, true);//percentage
 			dataFD = array_compiler(data3, data4, false);///absolutes
+
+			//update the dictionary of pairs
+			correlationDict.set('row'+rowID, {perc: dataF, abs: dataFD});
+			rowID++;
 
 			//ev.preventDefault();
 			//console.log(dataF);//!!!
@@ -265,7 +272,7 @@ function drawC(dat, assetN) {
 		title: assetN,
 		legend: { position: 'top' },
 		hAxis: { title: apiCall[0].timeInterval },
-		vAxis: { title: "Dollar Price" },
+		vAxis: { title: document.querySelector('#flexSwitchCheckDefault').checked? "Dollar Price": "Percentage change" },
 	};
 
 	var chart_obj = new google.visualization.LineChart(chart_el);
