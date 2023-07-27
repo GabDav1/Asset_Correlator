@@ -3,13 +3,13 @@ $('#flexSwitchCheckDefault').click(function() {
 	//toggles between percent and dollar values
 	if(document.getElementById('flexSwitchCheckDefault').checked){ 
 		//var dataF =	array_compiler(data3, data4);
-		drawC(dataFD, apiCall[0].ticker + " vs " + apiCall[1].ticker + ", from " + dataF[1][0] + " to "+ dataF[dataF.length - 1][0]);
+		drawC(dataFDglobal, dataFDglobal[0][1] +' vs '+ dataFDglobal[0][2]);
 		//toggle highlighted text
 		$('#PERC').toggleClass('boss demotext');
 		$('#ABS').toggleClass('demotext boss');
 	}else{
 		//var dataF =	array_compiler(data5, data6);
-		drawC(dataF, apiCall[0].ticker + " vs " + apiCall[1].ticker + ", from " + dataF[1][0] + " to "+ dataF[dataF.length - 1][0]);
+		drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
 		//toggle highlighted text
 		$('#PERC').toggleClass('demotext boss');
 		$('#ABS').toggleClass('boss demotext');

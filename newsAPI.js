@@ -1,22 +1,24 @@
 
-function get_news(newsItem, assetNo) {
-
-    var query = newsItem;
+function get_news(query, assetNo) {
 
     //api restriciton: only fetch news from current month
     const now = new Date();
-    const newsDate = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+'01';
-    //console.log(newsDate);
+    //const newsDate =new Date(now.getFullYear()+'-'+(now.getMonth()-5)+'-'+'01');
+    const timeOffset = 28*24*3600*1000;//28 days in milliseconds
+    const newsDate =new Date(Date.now() - timeOffset);
+    
+    //console.log(newsDate.toLocaleDateString());
         
     var url = 'https://newsapi.org/v2/everything?' +
         'q=' + query +
-        '&from='+newsDate+'&' +
+        '&from='+newsDate.toLocaleDateString()+'&' +
         'sortBy=popularity&' +
         'apiKey=' + NEWS_KEY;
 
     //var url2 = 'https://api.newscatcherapi.com/v2/search?q=' + query;
     //'&x-api-key=' + NEWS_KEY2;
 
+    //console.log(url);
     var req = new Request(url);
     //req.headers.append("x-api-key", NEWS_KEY2); //add header in request js(for url2)
 
@@ -28,31 +30,40 @@ function get_news(newsItem, assetNo) {
             //console.log(objson.articles[0].title);
             //console.log(objson);
 
-            /*switch(assetNo){case 'ass1' : i = 1;
-                case 'ass2' : i = 2;
-            }*/
+            /*switch(assetNo){case 'ass1' : i = 1; case 'ass2' : i = 2; }*/
             let assetIterator = (assetNo == 'ass1') ? 1 : 2;
 
+            let newsIterator = 0;
             for (let i = assetIterator; i <= newsItems; i += 4) {
-                //news title+link
-                document.getElementById('news-' + i).innerHTML = "<a class='row'" +
-                    "href='" + objson.articles[i].url + "'>" +
-                    objson.articles[i].title + "</a>";
-                //news body
-                let j = i + 2;
+                    //news title+link
+                    try{
+                        document.getElementById('news-' + i).innerHTML = "<a class='row'" +
+                            "href='" + objson.articles[newsIterator].url + "'>" +
+                            objson.articles[newsIterator].title + "</a>";
+                    
+                        //news body
+                        let j = i + 2;
 
-                //based on i but needs to start from 1 always
-                let k = (i % 2 == 0) ? (i - 1) : i;
+                        //based on i but needs to start from 1 always
+                        let k = (i % 2 == 0) ? (i - 1) : i;
 
-                document.getElementById('news-' + j).innerHTML = objson.articles[i].description;
-                if (i <= newsItems - 4 && document.getElementById('news-' + (i + 4)) == null) {
-                    //console.log(document.getElementById('news-' + (i+4)));
+                        document.getElementById('news-' + j).innerHTML = "<label class='home-title'>"+
+                        "<span>"+objson.articles[newsIterator].description+"</span></label>";
 
-                    //just adds the next rows
-                    add_news_row(k + 4, 'demo3/4');
-                    add_news_row(k + 6, 'demo5');
+                        if (i <= newsItems - 4 && document.getElementById('news-' + (i + 4)) == null) {
+                            //console.log(document.getElementById('news-' + (i+4)));
+    
+                            //just adds the next rows
+                            add_news_row(k + 4, 'demo3/4');
+                            add_news_row(k + 6, 'demo5');
+                        }
+                        newsIterator++;
+
+                }catch(err){
+                    console.log(err);
                 }
             }
+            
         });
 }
 
@@ -94,15 +105,9 @@ function infiniteScroll() {
 
         //triggers news fetch, then bounce
         if(!isBounced && newsItems<maxNewsItems){
-            try{
                 newsItems+=8;
-                //console.log(apiCall[0].ticker);
-                get_news(apiCall[1].ticker, 'ass2');
-                //console.log(apiCall[1].ticker);
-                get_news(apiCall[0].ticker, 'ass1');
-            }catch(err){
-                console.log(err);
-            }
+                get_news(apiCall[1].description, 'ass2');
+                get_news(apiCall[0].description, 'ass1');
         }
         isBounced = true;
         setTimeout(()=> isBounced = false, 1000);

@@ -20,7 +20,8 @@ function correlation(dataCube){
 	corPer = (corPerCount / dataCube.length)* 100;
 	//renders it
 	corTable.innerHTML+= `<tr class="all-rows" id="row${rowID}">
-		<td><span>${urlFunc.substr(21, 5)}</span></td>
+		<td><span class="dpsym">${new Date().toLocaleDateString()}</span></td>
+		<td><span>${urlFunc.substr(21, 5)}-${dataCube.length}</span></td>
 		<td><span class="dpsym">${dataCube[0][1]}</span></td>
 		<td><span class="dpaon">${dataCube[0][2]}</span></td>
 		<td><span class="dpcurtype">${parseInt(corScore)}</span></td>
@@ -39,18 +40,18 @@ function updateRows(){
 	allRows.forEach(row =>{
 		row.addEventListener('click', ()=>{
 			///console.log(correlationDict.get(row.id));
-			dataF = correlationDict.get(row.id).perc;
-			dataFD = correlationDict.get(row.id).abs;
+			dataFglobal = correlationDict.get(row.id).perc;
+			dataFDglobal = correlationDict.get(row.id).abs;
 
 			//reset perc toggle to default
 			document.querySelector('#flexSwitchCheckDefault').checked = false;
 
-			drawC(dataF, dataF[0][1] +' vs '+ dataF[0][2]);
+			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
 		});
 	})
 }
 
-function array_compiler(datax, datay, isPerc) {
+function array_compiler(datax, datay) {
 	
 	//taiem diferenta de lungime dintre array-uri prin splicing
 	if (datax.length < datay.length){
@@ -80,7 +81,7 @@ function array_compiler(datax, datay, isPerc) {
 		console.log("array compiler error");
 	}
 	//calculates correlation score
-    if(isPerc) correlation(dataG);
+    //if(isPerc) correlation(dataG);
 	
 	return dataG;
 }
