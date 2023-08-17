@@ -99,15 +99,15 @@ function infiniteScroll() {
     let viewPort = window.innerHeight+ window.scrollY; 
 
     if(viewPort > contentHeight-80) {
-        
-        //console.log('viewport: '+viewPort);
         //console.log('contentheight: '+ contentHeight);
 
         //triggers news fetch, then bounce
         if(!isBounced && newsItems<maxNewsItems){
                 newsItems+=8;
-                get_news(apiCall[1].description, 'ass2');
-                get_news(apiCall[0].description, 'ass1');
+                get_news(news1G, 'ass2');
+                get_news(news2G, 'ass1');
+
+                console.log(news1G, news2G);
         }
         isBounced = true;
         setTimeout(()=> isBounced = false, 1000);

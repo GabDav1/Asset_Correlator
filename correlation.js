@@ -19,7 +19,7 @@ function correlation(dataCube){
 	//percentage of instances of divergence
 	corPer = (corPerCount / dataCube.length)* 100;
 	//renders it
-	corTable.innerHTML+= `<tr class="all-rows" id="row${rowID}">
+	const tRow = `<tr class="all-rows" id="row${rowID}">
 		<td><span class="dpsym">${new Date().toLocaleDateString()}</span></td>
 		<td><span>${urlFunc.substr(21, 5)}-${dataCube.length}</span></td>
 		<td><span class="dpsym">${dataCube[0][1]}</span></td>
@@ -27,6 +27,7 @@ function correlation(dataCube){
 		<td><span class="dpcurtype">${parseInt(corScore)}</span></td>
 		<td><span class="dpcond">${corPer.toFixed(2)}${' '}% </span></td>
 		</tr>`;
+	(rowID===1)? corTable.innerHTML = tRow: corTable.innerHTML += tRow;
 
 	//event listeners on rows
 	updateRows();
@@ -45,7 +46,13 @@ function updateRows(){
 
 			//reset perc toggle to default
 			document.querySelector('#flexSwitchCheckDefault').checked = false;
+			news1G = correlationDict.get(row.id).data1N;
+			news2G = correlationDict.get(row.id).data2N;
 
+			get_news(news1G, 'ass1');
+			get_news(news2G, 'ass2');
+
+			///console.log(news1G, news2G);
 			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
 		});
 	})
@@ -56,11 +63,11 @@ function array_compiler(datax, datay) {
 	//taiem diferenta de lungime dintre array-uri prin splicing
 	if (datax.length < datay.length){
 		datay.splice(1,datay.length - datax.length);
-		console.log(datax[datax.length - 1][0],' ',datay[datax.length - 1][0]);
+		//console.log(datax[datax.length - 1][0],' ',datay[datax.length - 1][0]);
 	}else if(datax.length > datay.length){
 		datax.splice(1,datax.length - datay.length);
-		console.log(datax[datay.length - 1][0],' ', datay[datay.length - 1][0]);
-	}//}else{
+		//console.log(datax[datay.length - 1][0],' ', datay[datay.length - 1][0]);
+	}
 	
 	let dataG = [...datax];
 	
@@ -77,8 +84,7 @@ function array_compiler(datax, datay) {
 		});
 		}
 	}catch(error){
-		console.log(error.name + ' ' +	error.message);
-		console.log("array compiler error");
+		console.log("array compiler error" + error.name + ' ' +	error.message);
 	}
 	//calculates correlation score
     //if(isPerc) correlation(dataG);

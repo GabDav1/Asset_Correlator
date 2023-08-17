@@ -26,21 +26,22 @@ function styleWipe(src){
 		}
 }
 
+document.querySelector('#crawler-test').addEventListener('click',setDayParameter);
 
-$('#crawler-test').click(function() {
-	//add url via prompt
-	const urlTcrawl = prompt('Insert URL here');
-	crawlPage(urlTcrawl);		
-});			
+async function setDayParameter(){
+	const test = await getDayParameter();
 
-async function crawlPage(pageURL) {
-	
-	//const res = await fetch(pageURL, {
-		//mode: "no-cors"	});
+	//console.log(test);
+	return test===200? 'function=TIME_SERIES_DAILY&' : 'function=TIME_SERIES_DAILY_ADJUSTED&';
+}
 
-	//console.log(await res.text());
-	fetch(pageURL, {
-		mode: "no-cors"	})
-		.then(response => {return response.text()})
-		.then(res => {console.log(res)});	
+function getDayParameter(){
+
+	const testF = 'function=TIME_SERIES_DAILY&';
+	const urlBase = "https://www.alphavantage.co/query?" + testF + "symbol=IBM&outputsize=compact&"+ URL_KEY;
+
+	return fetch(urlBase).then(response => {
+		//console.log(response.status);
+		return response.status;
+	});
 }
