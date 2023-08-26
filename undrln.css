@@ -59,10 +59,55 @@
       padding-left: 20px;
       padding-right: 20px;
     }
+
+    .demo6 {
+      white-space: nowrap;
+      color: rgba(0,0,0,0.6);
+      cursor: pointer;
+      z-index: 2;
+      background-color: #efefef;
+        /*margin-right:  1rem;
+        margin-left:  1rem;*/
+      padding: 0.1rem 1rem;
+      transition: background-color 0.3s ease;
+
+      border-radius: 12px;
+    }
+
+    .d6brd{
+      border-style:solid;
+      border-color:black;
+      border-radius: 12px;
+    }
+    .table-resp{
+      position:relative;
+    }
+
+    .slider{
+      position:absolute;
+      top: 60px;
+
+      height: 2rem;
+      width: 100%;
+      margin: 0;
+      background: red;
+      border: solid;
+      transition: .3s ease-in-out;
+    }
+
+    .slctrbx {
+      /*padding: 0.1rem 0.05rem;
+      background-color: lightgray;*/
+      width: min-content;
+      border-radius: 2px;
+    }
     .hover {
       -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0); 
       box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
-}
+    }
+    .paddo{
+      padding: 0.35rem 0.1rem;
+    }
     .gradient {
       -webkit-box-shadow: 0px 0px 0px 5px #A0A0A0, inset 0px 10px 27px -8px rgba(255, 50, 0, 0.5), inset 0px -10px 27px -8px rgba(13, 110, 253, 0.5), 5px 5px 15px 5px rgba(0,0,0,0); 
       box-shadow: 0px 0px 0px 5px #A0A0A0, inset 0px 10px 27px -8px rgba(255, 50, 0, 0.5), inset 0px -10px 27px -8px rgba(13, 110, 253, 0.5), 5px 5px 15px 5px rgba(0,0,0,0);

@@ -9,7 +9,7 @@ function get_news(query, assetNo) {
     
     //console.log(newsDate.toLocaleDateString());
         
-    var url = 'https://newsapi.org/v2/everything?' +
+    let url = 'https://newsapi.org/v2/everything?' +
         'q=' + query +
         '&from='+newsDate.toLocaleDateString()+'&' +
         'sortBy=popularity&' +
@@ -19,7 +19,7 @@ function get_news(query, assetNo) {
     //'&x-api-key=' + NEWS_KEY2;
 
     //console.log(url);
-    var req = new Request(url);
+    let req = new Request(url);
     //req.headers.append("x-api-key", NEWS_KEY2); //add header in request js(for url2)
 
     let prom = fetch(req);
@@ -104,8 +104,8 @@ function infiniteScroll() {
         //triggers news fetch, then bounce
         if(!isBounced && newsItems<maxNewsItems){
                 newsItems+=8;
-                get_news(news1G, 'ass2');
-                get_news(news2G, 'ass1');
+                get_news(news1G, 'ass1');
+                get_news(news2G, 'ass2');
 
                 console.log(news1G, news2G);
         }

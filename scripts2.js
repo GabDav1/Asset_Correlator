@@ -32,7 +32,7 @@ const NEWS_KEY = "c7c7e05fa22c46c2a65a53205f9bf617";
 
 //collection of asset pairs
 const correlationDict = new Map();
-//cached price data
+//cached price data(WIP)
 const cacheData = new Map();
 //const NEWS_KEY2 = "qHe3AG87CbJCa_N2655gIEIZbW_CMjXZCoB07Nh89_s"; this is deprecated
 
@@ -44,15 +44,11 @@ let dataFglobal; //in percentages
 let dataFDglobal; //in absolute/dollar values
 let news1G, news2G; //global news search-terms
 
-///let isFinished1 = -1; //first asset flag
-///let isFinished2 = -1; //second asset flag
-//let isFinished1P = 0; 
-//let isFinished2P = 0; 
-
 let searchBox = [];
 searchBox[0] = '';
 const searchBoxApi = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
 let urlFunc;//global timeframe selector
+let dataPnts=101;//global variable for number of data points
 const waitTime = 300;//ticker-box interval (to call api only per "intention")
 //let loopWait = 2000;
 let isSearch = false;
@@ -74,14 +70,21 @@ function loopTIckers(tickers, news = tickers){
 	const apiCall = [''];//array of asset data
 
 	let j=1, lasti, lastj, i = 0;
+	//for wait message& interval interrupt
+	let waitMessage = 0;
 	//console.log(apiCall.length);
 	
 	let loopInterval = setInterval(()=>{	
+
 		if((i+1)===tickers.length){
 			clearInterval(loopInterval);
 			return;
 		}
-		//starting for the first time or the cursors changed
+
+		//console.log(apiCall[i], apiCall[j]);
+		console.log(waitMessage);
+
+		//starting for the first time or the cursors changed or there is an error
 		if((apiCall.length===1) || lasti!=i || lastj!=j || apiCall[i].isErr || apiCall[j].isErr){
 			if((i+1)===tickers.length)	return;
 			//only on first run
@@ -90,8 +93,18 @@ function loopTIckers(tickers, news = tickers){
 			if(!(apiCall[i].isErr===true || apiCall[j].isErr===true)) {
 				apiCall[i] = updateS(tickers[i], news[i]);
 				apiCall[j] = updateS(tickers[j], news[j]);
-
 				//console.log(apiCall[i].isErr, apiCall[j].isErr);
+				waitMessage = 0;
+			} 
+
+			//if(apiCall[i].noErr + apiCall[j].noErr>60){
+			if(waitMessage > 30){
+				clearInterval(loopInterval);
+				//just leaves the red error message rendering
+				document.getElementById('err-gjson-fail').setAttribute("style", "display: inline;");
+				document.getElementById('working').setAttribute("style", "display: none;");
+				document.getElementById('working-dots').setAttribute("style", "display: none;");
+				return;
 			}
 
 			const isBouncedI = (parseInt(Math.random()*10)%3) === 0;
@@ -100,13 +113,22 @@ function loopTIckers(tickers, news = tickers){
 			
 			//endpoint call triggers for first try or random 1/3 bounces for retries
 			const trigger1 = (!apiCall[i].isAbsRdy && !apiCall[i].isErr) || (apiCall[i].isErr && isBouncedI)
-			if(apiCall[i].isErr) console.log('isB1 '+isBouncedI, trigger1);
+			if(apiCall[i].isErr) {
+				console.log('isB1 '+isBouncedI, trigger1);
+				///apiCall[i].noErr++;
+			}
 			const trigger2 = (!apiCall[j].isAbsRdy && !apiCall[j].isErr) || (apiCall[j].isErr && isBouncedJ)
-			if(apiCall[j].isErr) console.log('isB2 '+isBouncedJ, trigger2);
+			if(apiCall[j].isErr) {
+				console.log('isB2 '+isBouncedJ, trigger2);
+				//apiCall[j].noErr++;
+			}
 
 			trigger1 && $.when($.getJSON(apiCall[i].totURL)).then(function(x){
 				try {
 					apiCall[i].data= loadArray(apiCall[i], 1000, x);
+					//splice to desired length here
+					if(apiCall[i].data.length >= dataPnts) apiCall[i].data.splice(1,apiCall[i].data.length - dataPnts);
+					//so percent will have the desired length from the start
 					apiCall[i].dataP = to_percent(apiCall[i]);
 
 					apiCall[i].isAbsRdy = true;
@@ -121,6 +143,9 @@ function loopTIckers(tickers, news = tickers){
 			trigger2 && $.when($.getJSON(apiCall[j].totURL)).then(function(x){
 				try {
 					apiCall[j].data= loadArray(apiCall[j], 1000, x);
+					//splice to desired length here
+					if(apiCall[j].data.length >= dataPnts) apiCall[j].data.splice(1,apiCall[j].data.length - dataPnts);
+					//so percent will have the desired length from the start
 					apiCall[j].dataP = to_percent(apiCall[j]);
 
 					apiCall[j].isAbsRdy = true;
@@ -137,18 +162,27 @@ function loopTIckers(tickers, news = tickers){
 			lastj = j;
 			
 		}
+
 		//one of the pairs is still loading
-		//if(isFinished1===0 || isFinished2===0){
-		if(!apiCall[i].isAbsRdy || !apiCall[j].isAbsRdy || !apiCall[i].isPercRdy || !apiCall[j].isPercRdy){
-			//console.log('...working', apiCall);
-			//console.log(lasti, i);
+		if(!apiCall[i].isAbsRdy || !apiCall[j].isAbsRdy){
+			waitMessage++;
+
+			document.getElementById('working').setAttribute("style", "display: inline;");
+			document.getElementById('working-dots').setAttribute("style", "display: inline;");
+
+			//animate the wait message
+			if(waitMessage%4===0)	{document.getElementById('working-dots').innerHTML=''}
+				else {document.getElementById('working-dots').innerHTML+='.'}
+
+			//change the wait message
+			if(waitMessage>10) document.getElementById('working').innerHTML='Hold on tight';
+			if(waitMessage>20) document.getElementById('working').innerHTML='This will take a little longer';
 		}
+
 		//both pairs finished
-		//if(isFinished1===1 && isFinished2===1 && isFinished1P===1 && isFinished2P===1){
-		//if(apiCall[i].isAbsRdy && apiCall[j].isAbsRdy && apiCall[i].isPercRdy && apiCall[j].isPercRdy){
 		if(apiCall[i].isAbsRdy && apiCall[j].isAbsRdy){
 			//cache here
-			cacheData.set(apiCall[i].ticker,apiCall[i]);
+			cacheData.set(apiCall[i].ticker,apiCall[i]);//todo: finish caching!!!(localStorage)
 			cacheData.set(apiCall[j].ticker,apiCall[j]);
 			//renders here
 			visualEye(apiCall[i], apiCall[j]);
@@ -173,8 +207,9 @@ function loopTIckers(tickers, news = tickers){
 
 function visualEye(dataI, dataJ) {
 	
-	document.getElementById('lol').setAttribute("style", "display: none;");
-
+	document.getElementById('working').setAttribute("style", "display: none;");
+	document.getElementById('working').innerHTML= 'Retrieving data from the server';
+	document.getElementById('working-dots').setAttribute("style", "display: none;");
 	//reset perc toggle to default
 	document.querySelector('#flexSwitchCheckDefault').checked = false;
 
@@ -194,34 +229,13 @@ function visualEye(dataI, dataJ) {
 	//drawC(dataF, apiCall[0].ticker + " vs " + apiCall[1].ticker + ", from " + dataF[1][0] + " to " + dataF[dataF.length - 1][0]);
 	drawC(dataF, dataF[0][1] + ' vs ' + dataF[0][2]);
 
-	
+}
 
-	/* OLD CODE
-	document.querySelector('#flexSwitchCheckDefault').checked = false;
-	//console.log(apiCall[0], apiCall[1]);
-	var idIntvl = setInterval(() => { //la fiecare 300ms verifica daca sunt gata datele
-		if (isFinished1===0 || isFinished2===0 || isFinished1P===0 || isFinished2P===0) {
-			//alert("data not ready");
-			document.getElementById('lol').setAttribute("style", "display: contents;");
-		} else {
-			//var dataxx = [...data5];
-			//var datayy = [...data6];
-			document.getElementById('lol').setAttribute("style", "display: none;");
+function autoCrawl(){
+	const usrInput = prompt('Please enter tickers separated by commas, like in below example', 'IBM,ADP');
 
-			//we only need correlation score for percentages
-			dataF = array_compiler(data5, data6, true);//percentage
-			dataFD = array_compiler(data3, data4, false);///absolutes
-
-			//update the dictionary of pairs
-			correlationDict.set('row'+rowID, {perc: dataF, abs: dataFD});
-			rowID++;
-
-			//ev.preventDefault();
-			//console.log(dataF);//!!!
-			drawC(dataF, apiCall[0].ticker + " vs " + apiCall[1].ticker + ", from " + dataF[1][0] + " to " + dataF[dataF.length - 1][0]);
-			clearInterval(idIntvl);
-		}
-	}, 30);*/
+	//console.log(usrInput.split(','));
+	loopTIckers(usrInput.split(','));
 }
 
 function updateS(ticker, news)
@@ -230,7 +244,7 @@ function updateS(ticker, news)
 	//var urlFunc = "function=TIME_SERIES_INTRADAY&";
 	const urlTicker = "symbol=" + ticker + "&";
 	//var urlInterv = "interval=5min&";
-	const urlSize = "outputsize=compact&";
+	const urlSize = "outputsize=full&";
 
 	const totURLOBJ =
 	{
@@ -241,6 +255,7 @@ function updateS(ticker, news)
 		description: ticker,
 		isAbsRdy: false,
 		isErr:false,
+		//noErr:0,
 		data: ['.'],
 		dataP:['.']
 	};
@@ -250,7 +265,7 @@ function updateS(ticker, news)
 }
 
 //bind function to button
-visualize.addEventListener('click', visualEye);
+visualize.addEventListener('click', autoCrawl);
 
 //change time function
 document.getElementById('z').onchange = async function () {
@@ -271,9 +286,7 @@ document.getElementById('z').onchange = async function () {
 	loopTIckers([asset1, asset2], [desc1, desc2]);
 };
 
-//init ticker 1, then 2
-//var ticker1 = document.getElementById('x').value;// same as apiCall.ticker?
-//var ticker2 = document.getElementById('y').value;
+//globals for ticker selection in GUI
 let isAss1Sel = true;
 let isAss2Sel = false;
 
@@ -302,16 +315,10 @@ document.getElementById('search').onchange = function () {
 		$('#dsc1').removeClass('home-title');
 		$('#dsc1').addClass('rederr');
 		
-		//ticker1 = thisTicker;
-		///tickers[0] = ticker1;
-		//apiCall[0] = updateS(1, description);//!!!!
-		//loadArray(apiCall[0]);
-		//data5 here
-		//to_percent('ass1', apiCall[0]);
-		//console.log(thisTicker, document.getElementById('y').firstElementChild.innerHTML);
+		//generate ticker array, then news array before calling 'main' function
 		const tickersData = [thisTicker.trim(), document.getElementById('y').firstElementChild.innerHTML.trim()];
 		const tickersNews = [description1.split(' - ')[0], description2.split(' - ')[0]];
-		console.log(description1.split(' - ')[0], description2.split(' - ')[0]);
+		//console.log(description1.split(' - ')[0], description2.split(' - ')[0]);
 		loopTIckers(tickersData, tickersNews);
 
 		styleWipe('ass1');
@@ -328,15 +335,10 @@ document.getElementById('search').onchange = function () {
 		$('#dsc2').removeClass('home-title');
 		$('#dsc2').addClass('rederr');
 
-		//ticker2 = thisTicker;
-		//tickers[1] = ticker2;
-		//apiCall[1] = updateS(2, description);
-		///loadArray(apiCall[1]);
-		//data6 here
-		//to_percent('ass2', apiCall[1]);
+		//generate ticker array, then news array before calling 'main' function
 		const tickersData = [document.getElementById('x').firstElementChild.innerHTML.trim(), thisTicker.trim()];
 		const tickersNews = [description1.split(' - ')[0], description2.split(' - ')[0]];
-		console.log(description1.split(' - ')[0], description2.split(' - ')[0]);
+		//console.log(description1.split(' - ')[0], description2.split(' - ')[0]);
 		loopTIckers(tickersData, tickersNews);
 
 		//visual wipe effect
@@ -387,20 +389,20 @@ document.getElementById('search').onkeyup = function (event) {
 //Chart rendering
 function drawC(dat, assetN) {
 
-	var chart_el = document.getElementById('chart');
+	let chart_el = document.getElementById('chart');
 
-	var chart_opt = {
+	let chart_opt = {
 		title: assetN,
 		legend: { position: 'top' },
 		vAxis: { title: document.querySelector('#flexSwitchCheckDefault').checked? "Dollar Price": "Percentage change" },
 		crosshair:{ 
 			color:'green',
 			trigger:'selection'
-		}
+		}//todo: event listeners on chart?
 	};
 
-	var chart_obj = new google.visualization.LineChart(chart_el);
-	var data_obj = new google.visualization.arrayToDataTable(dat);
+	let chart_obj = new google.visualization.LineChart(chart_el);
+	let data_obj = new google.visualization.arrayToDataTable(dat);
 
 	chart_obj.draw(data_obj, chart_opt);
 }

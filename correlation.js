@@ -32,6 +32,10 @@ function correlation(dataCube){
 	//event listeners on rows
 	updateRows();
 
+	//row highlighter animation
+	document.querySelector('#hr-slider').style.top = (30+(rowID * 33)) + 'px';
+	//console.log((rowID * 30) + 'px');
+
 	//todo: correlation temperatures for score and divergece percentage
 }
 
@@ -54,13 +58,21 @@ function updateRows(){
 
 			///console.log(news1G, news2G);
 			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
+
+			//row highlighter animation
+			const rowNo = Number(row.id.charAt(row.id.length-1));
+			document.querySelector('#hr-slider').style.top = (30+(rowNo*33))+'px';
+			//console.log((rowNo*30)+'px');
 		});
 	})
 }
 
 function array_compiler(datax, datay) {
 	
-	//taiem diferenta de lungime dintre array-uri prin splicing
+	//keep the lowest number of data points or the set amount of data points(100/200/400)
+	//if(datay.length >= dataPnts) datay.splice(1,datay.length - dataPnts);
+	//if(datax.length >= dataPnts) datax.splice(1,datax.length - dataPnts);
+	
 	if (datax.length < datay.length){
 		datay.splice(1,datay.length - datax.length);
 		//console.log(datax[datax.length - 1][0],' ',datay[datax.length - 1][0]);
@@ -69,6 +81,7 @@ function array_compiler(datax, datay) {
 		//console.log(datax[datay.length - 1][0],' ', datay[datay.length - 1][0]);
 	}
 	
+	console.log(datay, datax);
 	let dataG = [...datax];
 	
 	try{

@@ -71,15 +71,23 @@
 
 							<div class="row text-center my-1">
 								&nbsp &nbsp &nbsp
-								<div class="col-lg-6 d-flex justify-content-left">
+								<div class="col-lg-4 d-flex">
 									<select name="z" id="z" class="hover" >
 										<option value="function=TIME_SERIES_DAILY_ADJUSTED&">Daily</option>
 										<option value="function=TIME_SERIES_WEEKLY&">Weekly</option>
 										<option value="function=TIME_SERIES_MONTHLY&">Monthly</option>
 									</select>  
 									<div id="tstx" class="demotext"><span>&nbsp Time</span><span> Frame </span></div>
+									
 								</div>
 
+								<div class="col-lg-8 d-flex justify-content-left slctrbx">
+									<div id="101" class="demo6"  style="background-color: orange;">100</div>
+									<div id="201" class="demo6">200</div>
+									<div id="401" class="demo6">400</div>
+									
+								</div>
+								<div class="demotext">&nbsp Datapoints number</div>
 							</div>
 
 						
@@ -87,7 +95,7 @@
 					  </nav>
 
 					<main role="main" class="col-md-6 ml-sm-auto col-lg-6 pt-3 px-4"> 
-						<div class="table-responsive">
+						<div class="table-responsive table-resp">
 							<table id="dptable" class="table table-striped table-hover table-sm">
 								<thead>
 									<tr>
@@ -108,8 +116,10 @@
 										<td><span class="dpcurtype">100</span></td>
 										<td><span class="dpcond">50%</span></td>
 									</tr>
+									
 								</tbody>
 							</table>
+							<hr id="hr-slider" class="slider"/>
 						</div>
 					</main>
 
@@ -136,11 +146,12 @@
 			<!--. <input type="text" id="search" placeholder="Search for asset"> -->
 <label name="pad" class="row text-center py-1"></label>
 
-			<a href="#" id="visualize" class="btn btn-primary butobj">Visualize/Compare</a>
+			<a href="#" id="visualize" class="btn btn-primary butobj">AUTO(Experimental)</a>
 <br>
-			<div id="lol" style="display: none;">Retrieving data from the server...</div>
+			<div id="working" style="display: none;">Retrieving data from the server</div>
+			<span id="working-dots" style="display: none;"></span>
 			<div id="err-try-catch" class="rederr">Ticker not found.</div>
-			<div id="err-gjson-fail" class="rederr">Could not connect to server.</div>
+			<div id="err-gjson-fail" class="rederr">There was a problem with retrieving your data. Please try again later.</div>
 <br>
 <hr>
 <br>
