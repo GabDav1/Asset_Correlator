@@ -1,4 +1,62 @@
 
+function get_newsdata(query, assetNo){
+
+    //const timeOffset = 28*24*3600*1000;//28 days in milliseconds
+    //const newsDate =new Date(Date.now() - timeOffset);
+    //console.log('now: '+ new Date().toLocaleDateString('en-CA'));
+    ///console.log('lastMO: '+ newsDate.toLocaleDateString('en-US'));
+
+    const reqUrl = "https://newsdata.io/api/1/news?apikey=" +NEWSDATA_KEY+ "&q="+query+"&language=en";
+    let req = new Request(reqUrl);
+    //req.headers.append("x-api-key", NEWS_KEY2); //add header in request js(for url2)
+
+    let prom = fetch(req);
+    //transform promise to object, then populate containers
+    prom.then((response) => response.json())
+        .then((objson) => {
+
+            console.log(objson);
+            let assetIterator = (assetNo == 'ass1') ? 1 : 2;
+
+            let newsIterator = 0;
+            for (let i = assetIterator; i <= newsItems; i += 4) {
+                    //news title+link
+                    try{
+                        document.getElementById('news-' + i).innerHTML = "<a class='row'" +
+                            "href='" + objson.results[newsIterator].link + "'>" +
+                            objson.results[newsIterator].title + "</a>";
+                    
+                        //news body
+                        let j = i + 2;
+
+                        //based on i but needs to start from 1 always
+                        let k = (i % 2 == 0) ? (i - 1) : i;
+
+                        document.getElementById('news-' + j).innerHTML = "<label class='home-title'>"+
+                        "<span>"+objson.results[newsIterator].description+"</span></label>";
+
+                        if (i <= newsItems - 4 && document.getElementById('news-' + (i + 4)) == null) {
+                            //console.log(document.getElementById('news-' + (i+4)));
+    
+                            //just adds the next rows
+                            add_news_row(k + 4, 'demo3/4');
+                            add_news_row(k + 6, 'demo5');
+                        }
+                        if(newsIterator===9) break; 
+                        newsIterator++;
+
+                }catch(err){
+                    console.log(err);
+                    document.getElementById('news-' + i).innerHTML = "All news loaded.";
+                    document.getElementById('news-' + (i+2)).innerHTML = "No more articles.";
+                }
+            }
+            
+        });
+}
+
+document.querySelector('#crawler-test').addEventListener('click',get_newsdata);
+
 function get_news(query, assetNo) {
 
     //api restriciton: only fetch news from current month
@@ -114,4 +172,4 @@ function infiniteScroll() {
     };
 }
 
-window.addEventListener('scroll', infiniteScroll);
+//window.addEventListener('scroll', infiniteScroll);

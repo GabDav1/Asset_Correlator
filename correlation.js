@@ -81,7 +81,7 @@ function array_compiler(datax, datay) {
 		//console.log(datax[datay.length - 1][0],' ', datay[datay.length - 1][0]);
 	}
 	
-	console.log(datay, datax);
+	//console.log(datay, datax);
 	let dataG = [...datax];
 	
 	try{

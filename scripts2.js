@@ -7,8 +7,10 @@ window.onload = async () => {
 	//just hardcode the initial values
 	news2G = 'Barrick Gold';
 	news1G = 'Tesla Motors';
-	get_news(news2G, 'ass2');
-	get_news(news1G, 'ass1');
+	///get_news(news2G, 'ass2');
+	//get_newsdata(news2G, 'ass2');
+	///get_news(news1G, 'ass1');
+	get_newsdata(news1G, 'ass1');
 
 	//"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&outputsize=compact&apikey=O3LKWM6IB2BF94KE"
 	urlFunc = await setDayParameter();//urlFunc = 'function=TIME_SERIES_DAILY&';
@@ -29,6 +31,7 @@ window.onload = async () => {
 //keep secrets here for now
 const URL_KEY = "apikey=O3LKWM6IB2BF94KE";
 const NEWS_KEY = "c7c7e05fa22c46c2a65a53205f9bf617";
+const NEWSDATA_KEY = "pub_2918807c64b57df67092073c928a25487a62b";
 
 //collection of asset pairs
 const correlationDict = new Map();
@@ -62,7 +65,7 @@ const footerYear =  document.querySelector('#footer-year');
 const maxNewsItems = 40;//rather than infinite, scroll limited to this number
 let isBounced = false;//debouncing for news-scroll
 
-let newsItems = 16;//initial news segments
+let newsItems = 40;//initial news segments
 let allRows = [];
 
 function loopTIckers(tickers, news = tickers){

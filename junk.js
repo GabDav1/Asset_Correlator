@@ -26,8 +26,6 @@ function styleWipe(src){
 		}
 }
 
-document.querySelector('#crawler-test').addEventListener('click',changeDataPts);
-
 function changeDataPts(elId){
 	
 	const elIdNo = Number(elId);
