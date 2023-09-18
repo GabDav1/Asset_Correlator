@@ -8,7 +8,7 @@ window.onload = async () => {
 	news2G = 'Barrick Gold';
 	news1G = 'Tesla Motors';
 	///get_news(news2G, 'ass2');
-	//get_newsdata(news2G, 'ass2');
+	get_newsdata(news2G, 'ass2');
 	///get_news(news1G, 'ass1');
 	get_newsdata(news1G, 'ass1');
 
@@ -65,7 +65,7 @@ const footerYear =  document.querySelector('#footer-year');
 const maxNewsItems = 40;//rather than infinite, scroll limited to this number
 let isBounced = false;//debouncing for news-scroll
 
-let newsItems = 40;//initial news segments
+let newsItems = 16;//initial news segments
 let allRows = [];
 
 function loopTIckers(tickers, news = tickers){
@@ -327,7 +327,7 @@ document.getElementById('search').onchange = function () {
 		styleWipe('ass1');
 		//fetch the news about ticker
 		news1G = description1.split(' - ')[0];
-		get_news(news1G, 'ass1');
+		get_newsdata(news1G, 'ass1');
 	}
 	if (isAss2Sel) {
 		document.getElementById('y').firstElementChild.innerHTML = thisTicker;
@@ -348,7 +348,7 @@ document.getElementById('search').onchange = function () {
 		styleWipe('ass2');
 		//fetch the news about ticker
 		news2G = description2.split(' - ')[0];
-		get_news(news2G, 'ass2');
+		get_newsdata(news2G, 'ass2');
 	}
 	searchBox[0] = '';
 	document.getElementById('search').value = '';

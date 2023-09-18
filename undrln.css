@@ -22,6 +22,10 @@
   color: red;
   display: none;
     }
+    .hidd{
+      visibility: hidden;
+      display: none;
+    }
     .cFrame {
       -webkit-box-shadow: 8px 0px 0px 0px #4E4E56, 0px 8px 0px 0px #B1938B, -8px 0px 0px 0px #4E4E56, 0px 0px 0px 8px #B1938B, 8px -12px 23px 23px rgba(0,0,0,0); 
       box-shadow: 8px 0px 0px 0px #4E4E56, 0px 8px 0px 0px #B1938B, -8px 0px 0px 0px #4E4E56, 0px 0px 0px 8px #B1938B, 8px -12px 23px 23px rgba(0,0,0,0);
@@ -166,4 +170,8 @@
     margin-bottom: 20px;
     padding-bottom: 25px;
     width: 100%;
+}
+
+.margtop{
+  margin-top: 20px;
 }

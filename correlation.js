@@ -53,8 +53,8 @@ function updateRows(){
 			news1G = correlationDict.get(row.id).data1N;
 			news2G = correlationDict.get(row.id).data2N;
 
-			get_news(news1G, 'ass1');
-			get_news(news2G, 'ass2');
+			get_newsdata(news1G, 'ass1');
+			get_newsdata(news2G, 'ass2');
 
 			///console.log(news1G, news2G);
 			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
