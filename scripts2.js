@@ -33,7 +33,7 @@ window.onload = async () => {
 		if(tfrp.includes('?')){
 			tfrp = tfrp.split('?')[0];
 		}
-		tfrp=//complete this(switch case w/d/m)
+		//!!!tfrp=//complete this(switch case w/d/m)
 	}
 	
 	//?q fort tickers
@@ -74,9 +74,9 @@ window.onload = async () => {
 		
 	} else{
 		//just hardcode the initial values
-		news2G = 'Tesla Motors';
-		news1G = 'Barrick Gold';
-		const tickers = ['GOLD', 'TSLA'];
+		news1G = 'Tesla Motors';
+		news2G = 'Barrick Gold';
+		const tickers = ['TSLA', 'GOLD'];
 		
 		loopTIckers(tickers,[news1G, news2G]);
 	}
@@ -196,7 +196,9 @@ function loopTIckers(tickers, news = tickers){
 					console.log(apiCall[i].totURL);
 					apiCall[i].data= loadArray(apiCall[i], 1000, x);
 					//splice to desired length here
-					if(apiCall[i].data.length >= dataPnts) apiCall[i].data.splice(1,apiCall[i].data.length - dataPnts);
+					
+					//console.log(apiCall[i].data.splice(apiCall[i].data.length - dataPnts)); -worked like this without key inversion
+					if(apiCall[i].data.length > dataPnts) apiCall[i].data.splice(1, apiCall[i].data.length - dataPnts);
 					//so percent will have the desired length from the start
 					apiCall[i].dataP = to_percent(apiCall[i]);
 
@@ -214,10 +216,12 @@ function loopTIckers(tickers, news = tickers){
 					console.log(apiCall[j].totURL);
 					apiCall[j].data= loadArray(apiCall[j], 1000, x);
 					//splice to desired length here
-					if(apiCall[j].data.length >= dataPnts) apiCall[j].data.splice(1,apiCall[j].data.length - dataPnts);
+					//console.log(apiCall[j].data.splice(apiCall[j].data.length - dataPnts)); should have worked like this
+					
+					if(apiCall[j].data.length > dataPnts) apiCall[j].data.splice(1, apiCall[j].data.length - dataPnts);
 					//so percent will have the desired length from the start
 					apiCall[j].dataP = to_percent(apiCall[j]);
-
+					
 					apiCall[j].isAbsRdy = true;
 					//console.log(apiCall[i].data, apiCall[i].dataP);
 				} catch (error) {
