@@ -1,29 +1,94 @@
 google.charts.load('current', { 'packages': ['corechart'] });
 
 window.onload = async () => {
-	//also render year
-	footerYear.innerHTML = new Date().getFullYear();
-
-	//just hardcode the initial values
-	news2G = 'Barrick Gold';
-	news1G = 'Tesla Motors';
-	///get_news(news2G, 'ass2');
-	get_newsdata(news2G, 'ass2');
-	///get_news(news1G, 'ass1');
-	get_newsdata(news1G, 'ass1');
-
-	//"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&outputsize=compact&apikey=O3LKWM6IB2BF94KE"
-	urlFunc = await setDayParameter();//urlFunc = 'function=TIME_SERIES_DAILY&';
-	//console.log(urlFunc);
-	const tickers = ['TSLA', 'GOLD'];//tickers at page-load
-
+	
 	let dummy = [];
 	dummy[0] = []; dummy[1] = [];
 	//dummy values for initial rendering
 	[dummy[0][0], dummy[0][1], dummy[1][0], dummy[1][1]] = ["Time", "Select from below", 0, 0];
+	
+	//"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&outputsize=compact&apikey=O3LKWM6IB2BF94KE"
+	//urlFunc = await setDayParameter();
+	urlFunc = 'function=TIME_SERIES_WEEKLY&';
+		
+	//also render year
+	footerYear.innerHTML = new Date().getFullYear();
+	const pageURL = window.location.href;
+	
+	//gets search parameters from URL or defaults to hard-coded values
+	//?d for datapoints
+	if(pageURL.includes('?d=')){
+		let dtptsp = pageURL.split('?d=')[1];
+		//clean parameter list
+		if(dtptsp.includes('?')){
+			dtptsp = dtptsp.split('?')[0];
+		}
+		dataPnts= Number(dtptsp);
+	}
+	
+	//?t for time series
+	if(pageURL.includes('?t=')){
+		let tfrp = pageURL.split('?t=')[1];
+		//clean parameter list
+		if(tfrp.includes('?')){
+			tfrp = tfrp.split('?')[0];
+		}
+		tfrp=//complete this(switch case w/d/m)
+	}
+	
+	//?q fort tickers
+	if(pageURL.includes('?q=')){
+		let parameters = pageURL.split('?q=')[1];
+		//clean parameter list
+		if(parameters.includes('?')){
+			parameters = parameters.split('?')[0];
+		}
+		
+		news2G = parameters.split('-')[1];//todo: if split is longer than 2, get news for the last 2 items
+		news1G = parameters.split('-')[0];
+		
+		const tickers = parameters.split('-');
+		console.log(tickers);
+		
+		//checks and bounds -> change to forEach for >2 arrays
+		if(!news1G){
+				
+				console.log('news1g missing ');
+				drawC(dummy, 'Query string improperly formatted, format is ?q=asset1-asset2');
+				return;
+		}
+		if(!news2G){
+			
+				console.log('news2g missing ');
+				drawC(dummy, 'Query string improperly formatted, format is ?q=asset1-asset2');
+				return;
+		}
+		
+		loopTIckers(tickers, tickers);
+		
+		//also hydrate the front-end
+		document.querySelector('#x').firstElementChild.innerHTML=parameters.split('-')[0];
+		document.querySelector('#y').firstElementChild.innerHTML=parameters.split('-')[1];
+		document.querySelector('#dsc1').firstElementChild.innerHTML=parameters.split('-')[0];
+		document.querySelector('#dsc2').firstElementChild.innerHTML=parameters.split('-')[1];
+		
+	} else{
+		//just hardcode the initial values
+		news2G = 'Tesla Motors';
+		news1G = 'Barrick Gold';
+		const tickers = ['GOLD', 'TSLA'];
+		
+		loopTIckers(tickers,[news1G, news2G]);
+	}
+	
+	
+	///get_news(news2G, 'ass2');
+	get_newsdata(news2G, 'ass2');
+	///get_news(news1G, 'ass1');
+	get_newsdata(news1G, 'ass1');
+	
 	drawC(dummy, 'Please select the assets that you wish to compare.');
 
-	loopTIckers(tickers,[news1G, news2G]);
 };
 
 
@@ -128,6 +193,7 @@ function loopTIckers(tickers, news = tickers){
 
 			trigger1 && $.when($.getJSON(apiCall[i].totURL)).then(function(x){
 				try {
+					console.log(apiCall[i].totURL);
 					apiCall[i].data= loadArray(apiCall[i], 1000, x);
 					//splice to desired length here
 					if(apiCall[i].data.length >= dataPnts) apiCall[i].data.splice(1,apiCall[i].data.length - dataPnts);
@@ -145,6 +211,7 @@ function loopTIckers(tickers, news = tickers){
 			//let test2 =  await loadArray(apiCall[j],1000);
 			trigger2 && $.when($.getJSON(apiCall[j].totURL)).then(function(x){
 				try {
+					console.log(apiCall[j].totURL);
 					apiCall[j].data= loadArray(apiCall[j], 1000, x);
 					//splice to desired length here
 					if(apiCall[j].data.length >= dataPnts) apiCall[j].data.splice(1,apiCall[j].data.length - dataPnts);
