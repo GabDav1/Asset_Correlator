@@ -8,7 +8,7 @@ window.onload = async () => {
 	[dummy[0][0], dummy[0][1], dummy[1][0], dummy[1][1]] = ["Time", "Select from below", 0, 0];
 	
 	//"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&outputsize=compact&apikey=O3LKWM6IB2BF94KE"
-	//urlFunc = await setDayParameter();
+	urlFunc_DAY = await setDayParameter();
 	urlFunc = 'function=TIME_SERIES_WEEKLY&';
 		
 	//also render year
@@ -19,7 +19,7 @@ window.onload = async () => {
 	//?d for datapoints
 	if(pageURL.includes('?d=')){
 		let dtptsp = pageURL.split('?d=')[1];
-		//clean parameter list
+		//clean parameter list// TODO: remove # from URI query, maybe other chars too(/,\, ...)
 		if(dtptsp.includes('?')){
 			dtptsp = dtptsp.split('?')[0];
 		}
@@ -33,7 +33,20 @@ window.onload = async () => {
 		if(tfrp.includes('?')){
 			tfrp = tfrp.split('?')[0];
 		}
-		//!!!tfrp=//complete this(switch case w/d/m)
+		//it can be week, day or month
+		switch(tfrp){
+			case 'day':
+				urlFunc = urlFunc_DAY;
+				break;
+			case 'wk':
+				urlFunc = 'function=TIME_SERIES_WEEKLY&';
+				break;
+			case 'mo':
+				urlFunc = 'function=TIME_SERIES_MONTHLY&';
+				break;
+			default:
+				alert('Time-frame accepted inputs are: day for daily, wk for weekly and mo for monthly. Your input will be ignored.')
+		}
 	}
 	
 	//?q fort tickers
@@ -48,7 +61,7 @@ window.onload = async () => {
 		news1G = parameters.split('-')[0];
 		
 		const tickers = parameters.split('-');
-		console.log(tickers);
+		//console.log(tickers);
 		
 		//checks and bounds -> change to forEach for >2 arrays
 		if(!news1G){
@@ -66,7 +79,7 @@ window.onload = async () => {
 		
 		loopTIckers(tickers, tickers);
 		
-		//also hydrate the front-end
+		//hydrate the front-end; TODO: also if split is longer than 2 get news from the last 2 items
 		document.querySelector('#x').firstElementChild.innerHTML=parameters.split('-')[0];
 		document.querySelector('#y').firstElementChild.innerHTML=parameters.split('-')[1];
 		document.querySelector('#dsc1').firstElementChild.innerHTML=parameters.split('-')[0];
