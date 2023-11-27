@@ -37,12 +37,15 @@ window.onload = async () => {
 		switch(tfrp){
 			case 'day':
 				urlFunc = urlFunc_DAY;
+				document.getElementById('z').selectedIndex=1;
 				break;
 			case 'wk':
 				urlFunc = 'function=TIME_SERIES_WEEKLY&';
+				document.getElementById('z').selectedIndex=0;
 				break;
 			case 'mo':
 				urlFunc = 'function=TIME_SERIES_MONTHLY&';
+				document.getElementById('z').selectedIndex=2;
 				break;
 			default:
 				alert('Time-frame accepted inputs are: day for daily, wk for weekly and mo for monthly. Your input will be ignored.')
