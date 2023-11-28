@@ -55,6 +55,9 @@ function updateRows(){
 
 			get_newsdata(news1G, 'ass1');
 			get_newsdata(news2G, 'ass2');
+			
+			//set correct tickers - WIP: CONTINUE FROM HERE
+			console.log(document.querySelector(row.id).children + ' ', document.querySelector(row.id).children);
 
 			///console.log(news1G, news2G);
 			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
