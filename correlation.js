@@ -56,10 +56,15 @@ function updateRows(){
 			get_newsdata(news1G, 'ass1');
 			get_newsdata(news2G, 'ass2');
 			
-			//set correct tickers - WIP: CONTINUE FROM HERE
-			console.log(document.querySelector(row.id).children + ' ', document.querySelector(row.id).children);
+			//set correct tickers [state management]
+			//console.log(document.querySelector('#x').firstChild.innerHTML);
+			//console.log(document.querySelector('#x').firstChild.innerText);
+			document.querySelector('#x').firstElementChild.innerHTML = 'todo';
+			document.querySelector('#y').firstElementChild.innerHTML = 'todo';
+			document.querySelector('#dsc1').firstElementChild.innerHTML = correlationDict.get(row.id).data1N;
+			document.querySelector('#dsc2').firstElementChild.innerHTML = correlationDict.get(row.id).data2N;
 
-			///console.log(news1G, news2G);
+			//console.log(document.querySelector('#'+row.id).children[3].innerHTML);
 			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
 
 			//row highlighter animation
