@@ -59,12 +59,12 @@ function updateRows(){
 			//set correct tickers [state management]
 			//console.log(document.querySelector('#x').firstChild.innerHTML);
 			//console.log(document.querySelector('#x').firstChild.innerText);
-			document.querySelector('#x').firstElementChild.innerHTML = 'todo';
-			document.querySelector('#y').firstElementChild.innerHTML = 'todo';
+			document.querySelector('#x').firstElementChild.innerHTML = correlationDict.get(row.id).data1T;
+			document.querySelector('#y').firstElementChild.innerHTML = correlationDict.get(row.id).data2T;
 			document.querySelector('#dsc1').firstElementChild.innerHTML = correlationDict.get(row.id).data1N;
 			document.querySelector('#dsc2').firstElementChild.innerHTML = correlationDict.get(row.id).data2N;
 
-			//console.log(document.querySelector('#'+row.id).children[3].innerHTML);
+			console.log(document.querySelector('#'+row.id).children[1].innerHTML);//todo: FROM HERE, HYDRATE TIME FRAME SELECTOR TOO
 			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
 
 			//row highlighter animation

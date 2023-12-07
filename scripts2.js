@@ -312,8 +312,8 @@ function visualEye(dataI, dataJ) {
 	//correlation score and updates table on page
 	correlation(dataF);
 
-	//update the dictionary of pairs///TODO: DATAJ.TICKER!!!!!!!!!!!!
-	correlationDict.set('row' + rowID, { perc: dataF, abs: dataFD, data1N: dataI.news, data2N: dataJ.news });
+	//update the dictionary of pairs
+	correlationDict.set('row' + rowID, { perc: dataF, abs: dataFD, data1N: dataI.news, data2N: dataJ.news, data1T: dataI.ticker, data2T: dataJ.ticker });
 	rowID++;
 
 	//drawC(dataF, apiCall[0].ticker + " vs " + apiCall[1].ticker + ", from " + dataF[1][0] + " to " + dataF[dataF.length - 1][0]);
