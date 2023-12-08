@@ -64,7 +64,27 @@ function updateRows(){
 			document.querySelector('#dsc1').firstElementChild.innerHTML = correlationDict.get(row.id).data1N;
 			document.querySelector('#dsc2').firstElementChild.innerHTML = correlationDict.get(row.id).data2N;
 
-			console.log(document.querySelector('#'+row.id).children[1].innerHTML);//todo: FROM HERE, HYDRATE TIME FRAME SELECTOR TOO
+			//console.log(document.querySelector('#'+row.id).children[1].innerText);
+			//selectors for time frame and number of data points
+			const urlfuncSelec = document.querySelector('#'+row.id).children[1].innerText.split('-')[0];
+			dataPnts = Number(document.querySelector('#'+row.id).children[1].innerText.split('-')[1]);
+			console.log(dataPnts);
+			//set time frame
+			switch(urlfuncSelec){
+			case 'DAILY':
+				urlFunc = urlFunc_DAY;
+				document.getElementById('z').selectedIndex=1;
+				break;
+			case 'WEEKL':
+				urlFunc = 'function=TIME_SERIES_WEEKLY&';
+				document.getElementById('z').selectedIndex=0;
+				break;
+			case 'MONTH':
+				urlFunc = 'function=TIME_SERIES_MONTHLY&';
+				document.getElementById('z').selectedIndex=2;
+				break;
+			}
+			
 			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
 
 			//row highlighter animation

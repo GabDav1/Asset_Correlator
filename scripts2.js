@@ -132,6 +132,7 @@ let searchBox = [];
 searchBox[0] = '';
 const searchBoxApi = 'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords='
 let urlFunc;//global timeframe selector
+let urlFunc_DAY;//keep correct option for daily globally
 let dataPnts=101;//global variable for number of data points
 const waitTime = 300;//ticker-box interval (to call api only per "intention")
 //let loopWait = 2000;
