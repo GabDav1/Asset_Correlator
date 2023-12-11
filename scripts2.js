@@ -14,12 +14,13 @@ window.onload = async () => {
 	//also render year
 	footerYear.innerHTML = new Date().getFullYear();
 	const pageURL = window.location.href;
+	// TODO: remove # from URI query, maybe other chars too(/,\, ...)!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
 	//gets search parameters from URL or defaults to hard-coded values
 	//?d for datapoints
 	if(pageURL.includes('?d=')){
 		let dtptsp = pageURL.split('?d=')[1];
-		//clean parameter list// TODO: remove # from URI query, maybe other chars too(/,\, ...)
+		//clean parameter list
 		if(dtptsp.includes('?')){
 			dtptsp = dtptsp.split('?')[0];
 		}
@@ -60,7 +61,9 @@ window.onload = async () => {
 			parameters = parameters.split('?')[0];
 		}
 		
-		news2G = parameters.split('-')[1];//todo: if split is longer than 2, get news for the last 2 items
+		//if split is longer than 2, get news/hydrate for the last 2 items
+		console.log(parameters.split('-').length);
+		news2G = parameters.split('-')[1];
 		news1G = parameters.split('-')[0];
 		
 		const tickers = parameters.split('-');
@@ -82,7 +85,7 @@ window.onload = async () => {
 		
 		loopTIckers(tickers, tickers);
 		
-		//hydrate the front-end; TODO: also if split is longer than 2 get news from the last 2 items
+		//hydrate the front-end; TODO: also if split is longer than 2 get news from the last 2 items!!!!!!!!!!!!!!!!!!
 		document.querySelector('#x').firstElementChild.innerHTML=parameters.split('-')[0];
 		document.querySelector('#y').firstElementChild.innerHTML=parameters.split('-')[1];
 		document.querySelector('#dsc1').firstElementChild.innerHTML=parameters.split('-')[0];
