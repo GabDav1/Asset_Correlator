@@ -13,8 +13,11 @@ window.onload = async () => {
 		
 	//also render year
 	footerYear.innerHTML = new Date().getFullYear();
-	const pageURL = window.location.href;
-	// TODO: remove # from URI query, maybe other chars too(/,\, ...)!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	let pageURL = window.location.href;
+	// removes all # occrences from URI query
+	if(pageURL.includes('#')) pageURL = pageURL.replace(/#/g, '');
+	//console.log(pageURL);
 	
 	//gets search parameters from URL or defaults to hard-coded values
 	//?d for datapoints
@@ -62,9 +65,10 @@ window.onload = async () => {
 		}
 		
 		//if split is longer than 2, get news/hydrate for the last 2 items
-		console.log(parameters.split('-').length);
-		news2G = parameters.split('-')[1];
-		news1G = parameters.split('-')[0];
+		//console.log();
+		const paramLstSz = parameters.split('-').length;
+		news2G = parameters.split('-')[paramLstSz - 1];
+		news1G = parameters.split('-')[paramLstSz - 2];
 		
 		const tickers = parameters.split('-');
 		//console.log(tickers);
@@ -85,11 +89,11 @@ window.onload = async () => {
 		
 		loopTIckers(tickers, tickers);
 		
-		//hydrate the front-end; TODO: also if split is longer than 2 get news from the last 2 items!!!!!!!!!!!!!!!!!!
-		document.querySelector('#x').firstElementChild.innerHTML=parameters.split('-')[0];
-		document.querySelector('#y').firstElementChild.innerHTML=parameters.split('-')[1];
-		document.querySelector('#dsc1').firstElementChild.innerHTML=parameters.split('-')[0];
-		document.querySelector('#dsc2').firstElementChild.innerHTML=parameters.split('-')[1];
+		//hydrate the front-end; if split is longer than 2 get news from the last 2 items
+		document.querySelector('#x').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 2];
+		document.querySelector('#y').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 1];
+		document.querySelector('#dsc1').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 2];
+		document.querySelector('#dsc2').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 1];
 		
 	} else{
 		//just hardcode the initial values
@@ -170,7 +174,7 @@ function loopTIckers(tickers, news = tickers){
 		}
 
 		//console.log(apiCall[i], apiCall[j]);
-		console.log(waitMessage);
+		//console.log(waitMessage);
 
 		//starting for the first time or the cursors changed or there is an error
 		if((apiCall.length===1) || lasti!=i || lastj!=j || apiCall[i].isErr || apiCall[j].isErr){
