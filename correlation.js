@@ -29,6 +29,8 @@ function correlation(dataCube){
 		</tr>`;
 	(rowID===1)? corTable.innerHTML = tRow: corTable.innerHTML += tRow;
 
+	//todo: add Pearson correlation column in addition to basic correlation https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
+
 	//event listeners on rows
 	updateRows();
 

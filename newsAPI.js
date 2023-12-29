@@ -14,6 +14,7 @@ function get_newsdata(query, assetNo){
             let assetIterator = (assetNo == 'ass1') ? 1 : 2;
 
             let newsIterator = 0;
+			let errorTriggered = false;
             for (let i = assetIterator; i <= newsItems; i += 4) {
                     //news title+link
                     try{
@@ -52,13 +53,23 @@ function get_newsdata(query, assetNo){
                         newsIterator++;
 
                 }catch(err){
-                    //console.log(err) TODO - add bing, google, etc.
-                    document.getElementById('news-' + i).innerHTML = query+" - All news loaded.";
-                    //redirect for more news(just duckduckgo for now)
-                    const moreNews = 'https://duckduckgo.com/?t=h_&q='+query+'&iar=news&ia=news'
-                    document.getElementById('news-' + (i+2)).innerHTML = "<p>Want more? &nbsp-&nbsp </p>"+
-                    ' <a href="'+moreNews+'">Get more news here</a> ';
-                    break;
+					
+					if(!errorTriggered){
+						//console.log(err) TODO - add bing, google, etc.
+						document.getElementById('news-' + i).innerHTML = query+" - All news loaded.";
+						//redirect for more news(just duckduckgo for now)
+						const moreNews = 'https://duckduckgo.com/?t=h_&q='+query+'&iar=news&ia=news'
+						document.getElementById('news-' + (i+2)).innerHTML = "<p>Want more? &nbsp-&nbsp </p>"+
+						' <a href="'+moreNews+'">Get more news here</a> ';
+						
+						//trigger it
+						errorTriggered=!errorTriggered
+					} else{
+						//here we continue by replacing former news with dashes
+						document.getElementById('news-' + i).innerHTML = query+"--";
+						document.getElementById('news-' + (i+2)).innerHTML = "<p>--</p>";
+					}
+					
                 }
             }
             
