@@ -66,7 +66,7 @@ function get_newsdata(query, assetNo){
 						errorTriggered=!errorTriggered
 					} else{
 						//here we continue by replacing former news with dashes
-						document.getElementById('news-' + i).innerHTML = query+"--";
+						document.getElementById('news-' + i).innerHTML = "--";
 						document.getElementById('news-' + (i+2)).innerHTML = "<p>--</p>";
 					}
 					
