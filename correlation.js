@@ -1,11 +1,29 @@
-function correlation(dataCube){
+function correlation(dataCube0){
+	//deep copy then get column headers
+	const dataCube = [...dataCube0];
+	const headers = dataCube.shift();
    
-    let cursorX, cursorY, corPer; 
-	let corScore = 0, corPerCount = 0;
-    for (let i = 2; i <dataCube.length; i++) {
+    let cursorX, cursorY, corPer;
+	let pears1=0, pears2=0, pears3=0;  
+	let corScore = 0, corPerCount = 0, runX = dataCube[0][1], runY = dataCube[0][2];
+
+	const meanX2 = dataCube.reduce((acc, cur)=> acc +  cur[1], 0) / dataCube.length;
+	const meanY2 = dataCube.reduce((acc, cur)=> acc +  cur[2], 0) / dataCube.length;
+	console.log("M-X: "+meanX2+" M--Y: "+meanY2);
+
+    for (let i = 1; i <dataCube.length; i++) {
         
+		//cursor values and running sums of x and y
         cursorX = dataCube[i][1] - dataCube[i-1][1];
         cursorY = dataCube[i][2] - dataCube[i-1][2];
+		runX += dataCube[i][1];
+		runY += dataCube[i][2];
+
+		//pearson first component
+		pears1 += (dataCube[i][1] - meanX2)*(dataCube[i][2] - meanY2);
+		//pearson 2nd and 3rd components
+		pears2 += (dataCube[i][1] - meanX2)*(dataCube[i][1] - meanX2);
+		pears3 += (dataCube[i][2] - meanY2)*(dataCube[i][2] - meanY2);
         
         //check for divergence
         if((cursorX>0 && cursorY<0) || (cursorX<0 && cursorY>0)){
@@ -16,16 +34,29 @@ function correlation(dataCube){
         }
     }
 
+	const pearson = pears1 / Math.sqrt(pears2 * pears3); 
+	console.log('Pearson: '+pearson);
+
+	//compute means
+	//const meanX = runX / dataCube.length;
+	//const meanY = runY / dataCube.length;
+	//console.log("Mx1: "+meanX+" My1: "+meanY);
+
+	//normalize corscore
+	corScore = (corScore / dataCube.length)* 10;
 	//percentage of instances of divergence
 	corPer = (corPerCount / dataCube.length)* 100;
+
+
 	//renders it
 	const tRow = `<tr class="all-rows" id="row${rowID}">
 		<td><span class="dpsym">${new Date().toLocaleDateString()}</span></td>
 		<td><span>${urlFunc.substr(21, 5)}-${dataCube.length}</span></td>
-		<td><span class="dpsym">${dataCube[0][1]}</span></td>
-		<td><span class="dpaon">${dataCube[0][2]}</span></td>
-		<td><span class="dpcurtype">${parseInt(corScore)}</span></td>
+		<td><span class="dpsym">${headers[1]}</span></td>
+		<td><span class="dpaon">${headers[2]}</span></td>
+		<td><span class="dpcurtype">${corScore.toFixed(1)}</span></td>
 		<td><span class="dpcond">${corPer.toFixed(2)}${' '}% </span></td>
+		<td><span class="dpcond">${pearson.toFixed(3)}</span></td>
 		</tr>`;
 	(rowID===1)? corTable.innerHTML = tRow: corTable.innerHTML += tRow;
 
