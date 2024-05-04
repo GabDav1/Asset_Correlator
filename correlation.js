@@ -9,7 +9,7 @@ function correlation(dataCube0){
 
 	const meanX2 = dataCube.reduce((acc, cur)=> acc +  cur[1], 0) / dataCube.length;
 	const meanY2 = dataCube.reduce((acc, cur)=> acc +  cur[2], 0) / dataCube.length;
-	console.log("M-X: "+meanX2+" M--Y: "+meanY2);
+	//console.log("M-X: "+meanX2+" M--Y: "+meanY2);
 
     for (let i = 1; i <dataCube.length; i++) {
         
@@ -35,12 +35,7 @@ function correlation(dataCube0){
     }
 
 	const pearson = pears1 / Math.sqrt(pears2 * pears3); 
-	console.log('Pearson: '+pearson);
-
-	//compute means
-	//const meanX = runX / dataCube.length;
-	//const meanY = runY / dataCube.length;
-	//console.log("Mx1: "+meanX+" My1: "+meanY);
+	//console.log('Pearson: '+pearson);
 
 	//normalize corscore
 	corScore = (corScore / dataCube.length)* 10;
@@ -83,6 +78,10 @@ function updateRows(){
 
 			//reset perc toggle to default
 			document.querySelector('#flexSwitchCheckDefault').checked = false;
+			document.querySelector('#PERC').classList = "form-check-label boss";
+			document.querySelector('#ABS').classList = "form-check-label demotext";
+
+
 			news1G = correlationDict.get(row.id).data1N;
 			news2G = correlationDict.get(row.id).data2N;
 

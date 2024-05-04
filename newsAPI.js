@@ -142,7 +142,7 @@ function infiniteScroll() {
                 get_newsdata(news1G, 'ass1');
                 get_newsdata(news2G, 'ass2');
 
-                console.log(news1G, news2G);
+                //console.log(news1G, news2G);
         }
         isBounced = true;
         setTimeout(()=> isBounced = false, 1000);

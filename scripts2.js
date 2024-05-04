@@ -67,10 +67,11 @@ window.onload = async () => {
 		//if split is longer than 2, get news/hydrate for the last 2 items
 		//console.log();
 		const paramLstSz = parameters.split('-').length;
-		news2G = parameters.split('-')[paramLstSz - 1];
-		news1G = parameters.split('-')[paramLstSz - 2];
+		news2G = parameters.split('-')[paramLstSz - 1].toUpperCase();
+		news1G = parameters.split('-')[paramLstSz - 2].toUpperCase();
 		
 		const tickers = parameters.split('-');
+		tickers.forEach((ticker, index) => {tickers[index] = ticker.toUpperCase()});
 		//console.log(tickers);
 		
 		//checks and bounds -> change to forEach for >2 arrays
@@ -87,13 +88,13 @@ window.onload = async () => {
 				return;
 		}
 		
-		loopTIckers(tickers, tickers);
+		loopTIckers(tickers);
 		
 		//hydrate the front-end; if split is longer than 2 get news from the last 2 items
-		document.querySelector('#x').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 2];
-		document.querySelector('#y').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 1];
-		document.querySelector('#dsc1').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 2];
-		document.querySelector('#dsc2').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 1];
+		document.querySelector('#x').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 2].toUpperCase();
+		document.querySelector('#y').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 1].toUpperCase();
+		document.querySelector('#dsc1').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 2].toUpperCase();
+		document.querySelector('#dsc2').firstElementChild.innerHTML=parameters.split('-')[paramLstSz - 1].toUpperCase();
 		
 	} else{
 		//just hardcode the initial values
@@ -310,6 +311,8 @@ function visualEye(dataI, dataJ) {
 	document.getElementById('working-dots').setAttribute("style", "display: none;");
 	//reset perc toggle to default
 	document.querySelector('#flexSwitchCheckDefault').checked = false;
+	document.querySelector('#PERC').classList = "form-check-label boss";
+	document.querySelector('#ABS').classList = "form-check-label demotext";
 
 	//we only need correlation score for percentages
 	const dataF = array_compiler(dataI.dataP, dataJ.dataP);//percentage
