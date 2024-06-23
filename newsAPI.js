@@ -1,9 +1,10 @@
 
 function get_newsdata(query, assetNo){
 
-    const reqUrl = "https://newsdata.io/api/1/news?apikey=" +NEWSDATA_KEY+ "&q="+query+"&language=en";
+    const reqUrl = "https://newsdata.io/api/1/latest?apikey=" +NEWSDATA_KEY+ "&q="+query+"&language=en"; //"https://newsdata.io/api/1/news?apikey=" +NEWSDATA_KEY+ "&q="+query+"&language=en";
     let req = new Request(reqUrl);
     //req.headers.append("x-api-key", NEWS_KEY2); //add header in request js(for url2)
+    //console.log(reqUrl);
 
     let prom = fetch(req);
     //transform promise to object, then populate containers
