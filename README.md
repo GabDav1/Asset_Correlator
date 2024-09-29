@@ -12,7 +12,7 @@ One of the best ways to use this app is via URL parametrization. This is what yo
 The idea is the app will take all pairs of tickers that can possibly form and generate the correlations.
 
 EXAMPLE: if you enter [?q=vale-ibm](https://gabdav1.github.io/Asset_Correlator/?q=vale-ibm), the app will generate correlations for the pairs VALE-IBM.
-But for [?q=vale-ibm-nvda]https://gabdav1.github.io/Asset_Correlator/?q=vale-ibm-nvda, you will get all the possible pairs between these 3 ( so vale-ibm, vale-nvda and ibm-nvda).
+But for [?q=vale-ibm-nvda](https://gabdav1.github.io/Asset_Correlator/?q=vale-ibm-nvda), you will get all the possible pairs between these 3 ( so vale-ibm, vale-nvda and ibm-nvda).
 
 The default time-frame is weekly and default data points is 100, so you get the correlation for 100 weeks if these parameters are not specified.
 
