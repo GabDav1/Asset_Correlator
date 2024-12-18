@@ -42,4 +42,4 @@ https://gabdav1.github.io/Asset_Correlator/
 
 ## Example Live Usage
 
-[Example](titlepic.jpg)(https://www.youtube.com/embed/GMc3-w5hq1w)
+[![Example](titlepic.jpg)](https://www.youtube.com/embed/GMc3-w5hq1w)
