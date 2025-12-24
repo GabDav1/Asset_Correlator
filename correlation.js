@@ -55,8 +55,6 @@ function correlation(dataCube0){
 		</tr>`;
 	(rowID===1)? corTable.innerHTML = tRow: corTable.innerHTML += tRow;
 
-	//todo: add Pearson correlation column in addition to basic correlation https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
-
 	//event listeners on rows
 	updateRows();
 
@@ -108,11 +106,11 @@ function updateRows(){
 				document.getElementById('z').selectedIndex=1;
 				break;
 			case 'WEEKL':
-				urlFunc = 'function=TIME_SERIES_WEEKLY&';
+				urlFunc = 'function=TIME_SERIES_WEEKLY_ADJUSTED&';
 				document.getElementById('z').selectedIndex=0;
 				break;
 			case 'MONTH':
-				urlFunc = 'function=TIME_SERIES_MONTHLY&';
+				urlFunc = 'function=TIME_SERIES_MONTHLY_ADJUSTED&';
 				document.getElementById('z').selectedIndex=2;
 				break;
 			}
@@ -130,8 +128,6 @@ function updateRows(){
 function array_compiler(datax, datay) {
 	
 	//keep the lowest number of data points or the set amount of data points(100/200/400)
-	//if(datay.length >= dataPnts) datay.splice(1,datay.length - dataPnts);
-	//if(datax.length >= dataPnts) datax.splice(1,datax.length - dataPnts);
 	
 	if (datax.length < datay.length){
 		datay.splice(1,datay.length - datax.length);
@@ -159,8 +155,6 @@ function array_compiler(datax, datay) {
 	}catch(error){
 		console.log("array compiler error" + error.name + ' ' +	error.message);
 	}
-	//calculates correlation score
-    //if(isPerc) correlation(dataG);
 	
 	return dataG;
 }

@@ -9,7 +9,7 @@ window.onload = async () => {
 	
 	//"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&outputsize=compact&apikey=O3LKWM6IB2BF94KE"
 	urlFunc_DAY = await setDayParameter();
-	urlFunc = 'function=TIME_SERIES_WEEKLY&';
+	urlFunc = 'function=TIME_SERIES_WEEKLY_ADJUSTED&';
 		
 	//also render year
 	footerYear.innerHTML = new Date().getFullYear();
@@ -44,11 +44,11 @@ window.onload = async () => {
 				document.getElementById('z').selectedIndex=1;
 				break;
 			case 'wk':
-				urlFunc = 'function=TIME_SERIES_WEEKLY&';
+				urlFunc = 'function=TIME_SERIES_WEEKLY_ADJUSTED&';
 				document.getElementById('z').selectedIndex=0;
 				break;
 			case 'mo':
-				urlFunc = 'function=TIME_SERIES_MONTHLY&';
+				urlFunc = 'function=TIME_SERIES_MONTHLY_ADJUSTED&';
 				document.getElementById('z').selectedIndex=2;
 				break;
 			default:
@@ -300,7 +300,7 @@ function loopTIckers(tickers, news = tickers){
 			}
 		}
 
-	},777);
+	},1024);
 	
 }
 
@@ -333,10 +333,10 @@ function visualEye(dataI, dataJ) {
 }
 
 function autoCrawl(){
-	const usrInput = prompt('Please enter tickers separated by commas, like in below example', 'IBM,ADP');
+	const usrInput = prompt('Please enter tickers separated by -, like in below example', 'IBM-ADP');
 
 	//console.log(usrInput.split(','));
-	loopTIckers(usrInput.split(','));
+	loopTIckers(usrInput.split('-'));
 }
 
 function updateS(ticker, news)
@@ -344,12 +344,10 @@ function updateS(ticker, news)
 	const urlBase = "https://www.alphavantage.co/query?";
 	//var urlFunc = "function=TIME_SERIES_INTRADAY&";
 	const urlTicker = "symbol=" + ticker + "&";
-	//var urlInterv = "interval=5min&";
-	const urlSize = "outputsize=full&";
 
 	const totURLOBJ =
 	{
-		totURL: urlBase + urlFunc + urlTicker + "" + urlSize + URL_KEY,
+		totURL: urlBase + urlFunc + urlTicker + "" + URL_KEY,
 		news: news,
 		ticker: ticker,
 		timeInterval: "",

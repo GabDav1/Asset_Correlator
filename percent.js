@@ -29,15 +29,19 @@ function to_percent(item) {
   function loadArray(item, errOffset, json){
 
 		let fortimeD;
+		let priceCandle;
 				switch(urlFunc.substr(21, 5)){
 					case "DAILY":
 						fortimeD = "Time Series (Daily)";
+						priceCandle = "4. close";
 						break;
 					case "WEEKL":
-						fortimeD = "Weekly Time Series";
+						fortimeD = "Weekly Adjusted Time Series";
+						priceCandle = "5. adjusted close";
 						break;
 					case "MONTH":
-						fortimeD = "Monthly Time Series";
+						fortimeD = "Monthly Adjusted Time Series";
+						priceCandle = "5. adjusted close";
 						break;
 					default:
 						console.log(urlFunc.substr(20, 6));
@@ -56,7 +60,7 @@ function to_percent(item) {
 					let dataP = Object.keys(timeD).reverse()[i];
 					arTest[ind] = [];
 					arTest[ind][0] = dataP;
-					arTest[ind][1] = Number(timeD[dataP]["4. close"]);
+					arTest[ind][1] = Number(timeD[dataP][priceCandle]);
 					ind++;
 				}
 				//table headers

@@ -73,14 +73,15 @@ document.querySelector('.slctrbx').addEventListener('click', (event)=>{
 
 async function setDayParameter(){
 	const test = await getDayParameter();
+	//const urlSize = "outputsize=full&";
 
 	//console.log(test);
-	return test===200? 'function=TIME_SERIES_DAILY&' : 'function=TIME_SERIES_DAILY_ADJUSTED&';
+	return test===200? 'function=TIME_SERIES_DAILY_ADJUSTED&' : 'function=TIME_SERIES_DAILY&';
 }
 
 function getDayParameter(){
 
-	const testF = 'function=TIME_SERIES_DAILY&';
+	const testF = 'function=TIME_SERIES_DAILY_ADJUSTED&';
 	const urlBase = "https://www.alphavantage.co/query?" + testF + "symbol=IBM&outputsize=compact&"+ URL_KEY;
 
 	return fetch(urlBase).then(response => {
