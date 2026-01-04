@@ -82,10 +82,15 @@ async function setDayParameter(){
 function getDayParameter(){
 
 	const testF = 'function=TIME_SERIES_DAILY_ADJUSTED&';
+	//const testF = 'function=TIME_SERIES_DAILY&';
 	const urlBase = "https://www.alphavantage.co/query?" + testF + "symbol=IBM&outputsize=compact&"+ URL_KEY;
 
-	return fetch(urlBase).then(response => {
-		//console.log(response.status);
-		return response.status;
-	});
+	//simulate a "not found" 400 code if endpoint has no price data, 200 OK code otherwise
+	return fetch(urlBase).then(response => response.json())
+						 .then(respjson => {
+							let test = respjson['Meta Data']? 200 : 400;
+							
+							//console.log(test);
+							return test;
+						 });		
 }

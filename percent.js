@@ -32,8 +32,10 @@ function to_percent(item) {
 		let priceCandle;
 				switch(urlFunc.substr(21, 5)){
 					case "DAILY":
-						fortimeD = "Time Series (Daily)";
-						priceCandle = "4. close";
+						// adapt to regular or adjusted endpoint for daily data
+						const test = urlFunc.substr(21, 6);
+						fortimeD = test === "DAILY&"? "Time Series (Daily)" : "Daily Adjusted Time Series";
+						priceCandle = test === "DAILY&"? "4. close" : "5. adjusted close";
 						break;
 					case "WEEKL":
 						fortimeD = "Weekly Adjusted Time Series";
