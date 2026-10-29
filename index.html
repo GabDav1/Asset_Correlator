@@ -80,14 +80,19 @@
 									</div>
 									<label class="form-check-label demotext" id="ABS" for="flexSwitchCheckDefault">$ABS</label>
 								</div>
-
+								<div class="col-lg-3 d-flex justify-content-center">
+									<label class="form-check-label boss" id="NORM" for="flexSwitchNormalized">Normalized? &nbsp &nbsp</label>
+									<div class="form-check form-switch">
+										<input class="form-check-input" type="checkbox" id="flexSwitchNormalized">
+									</div>
+								</div>
 							</div>
 
 							<div class="row text-center my-1 margtop">
 								&nbsp &nbsp &nbsp
 
 								<div class="col-lg-4 d-flex justify-content-left slctrbx">
-									<div id="101" class="demo6"  style="background-color: orange;">100</div>
+									<div id="101" class="demo6"  style="background: orange;">100</div>
 									<div id="201" class="demo6">200</div>
 									<div id="401" class="demo6">400</div>
 									
@@ -203,7 +208,15 @@
  
 </div><!--END OF CONTAINER -->
 
-  
+  <div id="backdrop" onclick="if(event.target===this)this.classList.remove('open')">
+    <div id="modal">
+      <button id="close-btn" onclick="document.getElementById('backdrop').classList.remove('open')">&times;</button>
+      <h2>Settings</h2>
+      <label class="setting"><input type="checkbox" /> Email notifications</label>
+      <label class="setting"><input type="checkbox" /> Dark mode</label>
+      <label class="setting"><input type="checkbox" /> Auto-save</label>
+    </div>
+  </div>
 
 </body>
 

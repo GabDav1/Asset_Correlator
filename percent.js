@@ -26,6 +26,47 @@ function to_percent(item) {
 	return data5;
 }
 
+function normalizePriceSeries(arr, priceColIndex = 1) {
+  // Return early if the array is empty or only contains headers
+  if (!arr || arr.length <= 1) return arr;
+
+  const headers = arr.data[0];
+  const data = arr.data.slice(1);
+
+  let min = Infinity;
+  let max = -Infinity;
+
+  // Step 1: Find the minimum and maximum values in the target column
+  for (let i = 0; i < data.length; i++) {
+    const price = Number(data[i][priceColIndex]);
+    
+      if (price < min) min = price;
+      if (price > max) max = price;
+  }
+
+  // Define the target scale
+  const scaleMin = 1;
+  const scaleMax = 1000;
+
+  // Step 2: Apply the normalization formula
+  const normalizedData = data.map(row => {
+    const newRow = [...row]; // Create a shallow copy to avoid mutating original data
+    const price = Number(newRow[priceColIndex]);
+
+      // Handle edge case: if all prices in the series are identical
+      if (max === min) {
+        newRow[priceColIndex] = scaleMin; 
+      } else {
+        // Apply the Min-Max formula
+        newRow[priceColIndex] = scaleMin + ((price - min) * (scaleMax - scaleMin)) / (max - min);
+      }
+    return newRow;
+  });
+
+  // Reattach headers and return
+  return [headers, ...normalizedData];
+}
+
   function loadArray(item, errOffset, json){
 
 		let fortimeD;

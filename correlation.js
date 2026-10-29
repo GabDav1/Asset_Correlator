@@ -19,9 +19,8 @@ function correlation(dataCube0){
 		runX += dataCube[i][1];
 		runY += dataCube[i][2];
 
-		//pearson first component
+		//pearson formula components
 		pears1 += (dataCube[i][1] - meanX2)*(dataCube[i][2] - meanY2);
-		//pearson 2nd and 3rd components
 		pears2 += (dataCube[i][1] - meanX2)*(dataCube[i][1] - meanX2);
 		pears3 += (dataCube[i][2] - meanY2)*(dataCube[i][2] - meanY2);
         
@@ -42,30 +41,19 @@ function correlation(dataCube0){
 	//percentage of instances of divergence
 	corPer = (corPerCount / dataCube.length)* 100;
 
+	return [pearson, dataCube.length, corScore, corPer];
+}
 
-	//renders it
-	const tRow = `<tr class="all-rows" id="row${rowID}">
-		<td><span class="dpsym">${new Date().toLocaleDateString()}</span></td>
-		<td><span>${urlFunc.substr(21, 5)}-${dataCube.length}</span></td>
-		<td><span class="dpsym">${headers[1]}</span></td>
-		<td><span class="dpaon">${headers[2]}</span></td>
-		<td><span class="dpcurtype">${corScore.toFixed(1)}</span></td>
-		<td><span class="dpcond">${corPer.toFixed(2)}${' '}% </span></td>
-		<td><span class="dpcond">${pearson.toFixed(3)}</span></td>
-		</tr>`;
-	(rowID===1)? corTable.innerHTML = tRow: corTable.innerHTML += tRow;
-
+function updateRows(){
 	//event listeners on rows
-	updateRows();
+	//updateRows();
 
 	//row highlighter animation
 	document.querySelector('#hr-slider').style.top = (30+(rowID * 33)) + 'px';
 	//console.log((rowID * 30) + 'px');
 
 	//todo: correlation temperatures for score and divergece percentage
-}
 
-function updateRows(){
 	allRows = document.querySelectorAll('.all-rows');
 
 	allRows.forEach(row =>{
@@ -73,6 +61,7 @@ function updateRows(){
 			///console.log(correlationDict.get(row.id));
 			dataFglobal = correlationDict.get(row.id).perc;
 			dataFDglobal = correlationDict.get(row.id).abs;
+			dataNglobal = correlationDict.get(row.id).norm;
 
 			//reset perc toggle to default
 			document.querySelector('#flexSwitchCheckDefault').checked = false;
@@ -115,10 +104,11 @@ function updateRows(){
 				break;
 			}
 			
-			drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
+			if(d_norm) drawC(dataNglobal, dataNglobal[0][1] +' vs '+ dataNglobal[0][2]); else {drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2])}
+			//drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
 
 			//row highlighter animation
-			const rowNo = Number(row.id.charAt(row.id.length-1));
+			const rowNo = Number(row.id.charAt(row.id.length-1)); // fix highlighter bug here
 			document.querySelector('#hr-slider').style.top = (30+(rowNo*33))+'px';
 			//console.log((rowNo*30)+'px');
 		});
@@ -138,7 +128,7 @@ function array_compiler(datax, datay) {
 	}
 	
 	//console.log(datay, datax);
-	let dataG = [...datax];
+	const dataG = structuredClone(datax);
 	
 	try{
 	//Compilarea datelor - pastram cubul cu maxim 3 coloane
@@ -155,6 +145,6 @@ function array_compiler(datax, datay) {
 	}catch(error){
 		console.log("array compiler error" + error.name + ' ' +	error.message);
 	}
-	
+	//console.log(dataG);
 	return dataG;
 }

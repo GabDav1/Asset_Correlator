@@ -78,7 +78,9 @@ function get_newsdata(query, assetNo){
 }
 
 document.querySelector('#crawler-test').addEventListener('click',function(){
-    alert('Your questions and feedback to gabrielcdavid@gmail.com');
+    //alert('Your questions and feedback to gcdid@gmail.com');
+    event.preventDefault(); 
+    document.getElementById('backdrop').classList.add('open');
 });
 //Code for newscatcher and NewsAPI:
 /*

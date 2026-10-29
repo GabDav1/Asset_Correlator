@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<head>
+    <title>HINDSIGHT</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <br>
+      <br>
+      <h1>HINDSIGHT - Currency Watcher</h1>
+        <p>Ver 0.00001</p>
+        <br>
+  
+        <div class="row">
+
+          <div class="form-group col-sm-3">
+            <select name="CUR" id="CUR01" class="chosen-select form-control">
+              <option value="K1">BTC</option>
+              <option value="K1">ETH</option>
+              <option value="K1">Dollar</option>
+            </select>
+          </div>
+          
+
+          <div class="form-group col-sm-3">
+            <select name="CUR" id="CUR02" class="chosen-select form-control">
+              <option value="K3">HindSight View</option>
+              <option value="K2">Simple View</option>
+            </select>
+          </div>
+
+        
+          <div class="form-group col-sm-3">
+            <select name="CUR" id="CUR03" class="chosen-select form-control">
+              <option value="K1">Chainlink</option>
+              <option value="K2">RSR</option>
+              <option value="K3">Chromia</option>
+              <option value="K4">OGN</option>
+              <option value="K5">Algorand</option>
+            </select>
+          </div>
+        
+        </div> <!end of row>
+        
+        <div class="row">
+          <div class="form group col-sm-3">
+            Start date: <input  class="form control" type="date" id="startD" placeholder="Start Date">
+          </div> 
+
+          <div class="form group col-sm-3">
+            End date: <input  class="form control" type="date" id="endD" placeholder="End Date">
+          </div> 
+
+          
+        </div> <!end of row>
+        <br>
+        
+          <input type="button" class="btn btn-dark" value="Add watch">
+        
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <table id="dptable" class="table">
+          <thead>
+              <tr>
+                  <th>Amount</th>
+                  <th>Symbol</th>
+                  <th>Best buy price</th>
+                  <th>Best sell price</th>
+                  <th>Profit</th>
+                  <th>Best buy date</th>
+                  <th>Best sell date</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td><input type="checkbox" name="record"></td>
+                  <td><span class="dpsym">BTCUSDT</span></td>
+                  <td><span class="dpaon">Price</span></td>
+                  <td><span class="dpcurtype">USDT</span></td>
+                  <td><span class="dpcond">Greater Than</span></td>
+                  <td><span class="dpprice1">Price 1</span></td>
+                  <td><span class="dpprice2">Price 2</span></td>
+              </tr>
+          </tbody>
+      </table>
+      
+      <button type="button" class="btn btn-danger delete-row">Delete Row</button>
+      
+    </div> <!end of container>
+
+    <script>
+    getallsymbols();
+
+    function getallsymbols(){
+        var ourRequest1 = new XMLHttpRequest();
+        var url = 'https://api.binance.com/api/v3/ticker/price';
+        ourRequest1.open('GET',url,true);
+        ourRequest1.onload = function (){  
+            ourData = JSON.parse(ourRequest1.responseText);
+          
+            var optionsAsString = '';
+        
+            for (i=0;i<ourData.length;i++){
+                optionsAsString += "<option value='" + ourData[i]["symbol"] + "'>" + ourData[i]["symbol"] + "</option>";
+            }    
+            $('select[id="CUR03"]' ).append( optionsAsString );
+        }
+        ourRequest1.send();
+    }
+
+    </script>
+  </body>
+</html>

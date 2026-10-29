@@ -1,8 +1,10 @@
 $('#flexSwitchCheckDefault').click(function() {
 	
+	document.querySelector('#flexSwitchNormalized').checked = false;
 	//toggles between percent and dollar values
 	if(document.getElementById('flexSwitchCheckDefault').checked){ 
 		//var dataF =	array_compiler(data3, data4);
+		//console.log(dataFDglobal);
 		drawC(dataFDglobal, dataFDglobal[0][1] +' vs '+ dataFDglobal[0][2]);
 		//toggle highlighted text
 		$('#PERC').toggleClass('boss demotext');
@@ -15,6 +17,25 @@ $('#flexSwitchCheckDefault').click(function() {
 		$('#ABS').toggleClass('boss demotext');
 	}
 	
+});
+
+$('#flexSwitchNormalized').click(function() {
+	
+	//toggles between percent and dollar values
+	d_norm = document.getElementById('flexSwitchNormalized').checked;
+	if (d_norm) {
+		drawC(dataNglobal, dataNglobal[0][1] +' vs '+ dataNglobal[0][2]);
+		document.querySelector('#flexSwitchCheckDefault').checked = false;
+		//toggle highlighted text
+		$('#PERC').attr('class','boss');
+		$('#ABS').attr('class','demotext');
+	}else{
+		drawC(dataFglobal, dataFglobal[0][1] +' vs '+ dataFglobal[0][2]);
+		$('#PERC').attr('class','boss');
+		$('#ABS').attr('class','demotext');
+	}
+	//console.log(d_norm);
+			
 });
 
 function styleWipe(src){

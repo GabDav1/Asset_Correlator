@@ -134,6 +134,7 @@ let rowID = 1;
 //global compiled arrays
 let dataFglobal; //in percentages
 let dataFDglobal; //in absolute/dollar values
+let dataNglobal; // normalized
 let news1G, news2G; //global news search-terms
 
 let searchBox = [];
@@ -152,11 +153,13 @@ const newsDiv = document.querySelector('#news-div');//news sector
 const fullContainer = document.querySelector('#full-container');//full container
 const htmlBody = document.querySelector('#html-body');//body
 const footerYear =  document.querySelector('#footer-year');
-const maxNewsItems = 40;//rather than infinite, scroll limited to this number
+const maxNewsItems = 40;//scroll limited to this number
 let isBounced = false;//debouncing for news-scroll
 
 let newsItems = 16;//initial news segments
 let allRows = [];
+//price data normalize
+let d_norm = false;
 
 function loopTIckers(tickers, news = tickers){
 
@@ -219,13 +222,14 @@ function loopTIckers(tickers, news = tickers){
 			trigger1 && $.when($.getJSON(apiCall[i].totURL)).then(function(x){
 				try {
 					console.log(apiCall[i].totURL);
-					apiCall[i].data= loadArray(apiCall[i], 1000, x);
+					apiCall[i].data = loadArray(apiCall[i], 1000, x);
+
 					//splice to desired length here
-					
-					//console.log(apiCall[i].data.splice(apiCall[i].data.length - dataPnts)); -worked like this without key inversion
 					if(apiCall[i].data.length > dataPnts) apiCall[i].data.splice(1, apiCall[i].data.length - dataPnts);
 					//so percent will have the desired length from the start
 					apiCall[i].dataP = to_percent(apiCall[i]);
+					//load normalized array
+					apiCall[i].dataN = normalizePriceSeries(apiCall[i]);
 
 					apiCall[i].isAbsRdy = true;
 				} catch (error) {
@@ -239,13 +243,14 @@ function loopTIckers(tickers, news = tickers){
 			trigger2 && $.when($.getJSON(apiCall[j].totURL)).then(function(x){
 				try {
 					console.log(apiCall[j].totURL);
-					apiCall[j].data= loadArray(apiCall[j], 1000, x);
-					//splice to desired length here
-					//console.log(apiCall[j].data.splice(apiCall[j].data.length - dataPnts)); should have worked like this
+					apiCall[j].data = loadArray(apiCall[j], 1000, x);
 					
+					//splice to desired length here
 					if(apiCall[j].data.length > dataPnts) apiCall[j].data.splice(1, apiCall[j].data.length - dataPnts);
 					//so percent will have the desired length from the start
 					apiCall[j].dataP = to_percent(apiCall[j]);
+					//load normalized array
+					apiCall[j].dataN = normalizePriceSeries(apiCall[j]);
 					
 					apiCall[j].isAbsRdy = true;
 					//console.log(apiCall[i].data, apiCall[i].dataP);
@@ -314,22 +319,43 @@ function visualEye(dataI, dataJ) {
 	document.querySelector('#PERC').classList = "form-check-label boss";
 	document.querySelector('#ABS').classList = "form-check-label demotext";
 
-	//we only need correlation score for percentages
+	//correlation score for percentages and normalized
+	
+	const dataN = array_compiler(dataI.dataN, dataJ.dataN);//normalized
 	const dataF = array_compiler(dataI.dataP, dataJ.dataP);//percentage
 	const dataFD = array_compiler(dataI.data, dataJ.data);///absolutes
+	
 	//load current globals
 	dataFglobal = dataF;
 	dataFDglobal = dataFD;
+	dataNglobal = dataN;
 	//correlation score and updates table on page
-	correlation(dataF);
+	const [dataPears, dataLen, corSco, corPer] = correlation(dataF);
+	//const [dataPears2, dataLen2, corSco2, corPer2] = correlation(dataN);//Pearson is identical for perc and normalized datasets
+
+	//renders it
+	const tRow = `<tr class="all-rows" id="row${rowID}">
+		<td><span class="dpsym">${new Date().toLocaleDateString()}</span></td>
+		<td><span>${urlFunc.substr(21, 5)}-${dataLen}</span></td>
+		<td><span class="dpsym">${dataI.ticker}</span></td>
+		<td><span class="dpaon">${dataJ.ticker}</span></td>
+		<td><span class="dpcurtype">${corSco.toFixed(1)}</span></td>
+		<td><span class="dpcond">${corPer.toFixed(2)}${' '}% </span></td>
+		<td><span class="dpcond">${dataPears.toFixed(3)}</span></td>
+		</tr>`;
+	(rowID===1)? corTable.innerHTML = tRow: corTable.innerHTML += tRow;
+	//console.log(corSco2);
+	//console.log(corPer2);
+	//console.log(dataPears2);
+	updateRows();
 
 	//update the dictionary of pairs
-	correlationDict.set('row' + rowID, { perc: dataF, abs: dataFD, data1N: dataI.news, data2N: dataJ.news, data1T: dataI.ticker, data2T: dataJ.ticker });
+	correlationDict.set('row' + rowID, { perc: dataF, abs: dataFD, norm: dataN, data1N: dataI.news, data2N: dataJ.news, data1T: dataI.ticker, data2T: dataJ.ticker });
+	//if(d_norm) correlationDict.set('row' + rowID, { perc: dataN, abs: dataFD, data1N: dataI.news, data2N: dataJ.news, data1T: dataI.ticker, data2T: dataJ.ticker });
 	rowID++;
 
 	//drawC(dataF, apiCall[0].ticker + " vs " + apiCall[1].ticker + ", from " + dataF[1][0] + " to " + dataF[dataF.length - 1][0]);
-	drawC(dataF, dataF[0][1] + ' vs ' + dataF[0][2]);
-
+	if(d_norm) drawC(dataN, dataN[0][1] + ' vs ' + dataN[0][2]); else {drawC(dataF, dataF[0][1] + ' vs ' + dataF[0][2])}
 }
 
 function autoCrawl(){
@@ -355,8 +381,9 @@ function updateS(ticker, news)
 		isAbsRdy: false,
 		isErr:false,
 		//noErr:0,
-		data: ['.'],
-		dataP:['.']
+		data: ['.'], //raw prices
+		dataP:['.'], //percentages
+		dataN:['.']  //normalized
 	};
 	//console.log(this);
 
@@ -467,7 +494,7 @@ document.getElementById('search').onkeyup = function (event) {
 				}*/
 				let optionTxt = '';
 				$.getJSON(searchBoxApi + searchBox[0] + '&' + URL_KEY, function (json) {
-					console.log(json);// Add try-catch block here aswell
+					//console.log(json);// Add try-catch block here aswell
 					searchBox[1] = searchBox[0];
 					json['bestMatches'].forEach(function (item, index, arr) {
 						// Setting up the tickers for the drop-down box
@@ -489,11 +516,13 @@ document.getElementById('search').onkeyup = function (event) {
 function drawC(dat, assetN) {
 
 	let chart_el = document.getElementById('chart');
+	d_norm = document.getElementById('flexSwitchNormalized').checked;
+	const sw_prc_abs = document.querySelector('#flexSwitchCheckDefault').checked;
 
 	let chart_opt = {
 		title: assetN,
 		legend: { position: 'top' },
-		vAxis: { title: document.querySelector('#flexSwitchCheckDefault').checked? "Dollar Price": "Percentage change" },
+		vAxis: { title: d_norm? "Normalized Values": sw_prc_abs? "Dollar Price" : "Percentage Change" },
 		crosshair:{ 
 			color:'green',
 			trigger:'selection'
